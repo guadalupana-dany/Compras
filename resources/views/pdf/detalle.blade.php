@@ -1,0 +1,77 @@
+<!DOCTYPE>
+<html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Reporte de venta</title>
+<style>
+    div{
+        margin-left: 15px;
+        margin-top: 15px;
+    }
+    table{
+        border-collapse: collapse;
+        width: 100%;
+
+    }
+    td,th{
+        border: 1px solid black;
+        text-align: center;
+    }
+    #head{
+        height: 40px;
+        background-color:silver;
+    }
+    #req{
+        height: 25px;
+    }
+    #sol{
+        height: 25px;
+        background-color:silver;
+    }
+</style>
+<body>
+<div>
+    <table>
+        <tr>
+            <th colspan="3"><center><b>COOPERATIVA DE AHORRO Y CRÉDITO INTEGRAL PARROQUIAL</b></center></th>
+            <th rowspan="3">
+                <img src="img/miCoope.jfif" alt="mi coope">
+            </th>
+        </tr>
+        <tr id="sol">
+            <th colspan="3"></th>
+        </tr>
+        <tr id="req">
+            <th colspan="3"><center><b>REQUISICION DE PAPELERIA Y UTILES NO. {{ $solicitud->orden }}</b></center></th>
+        </tr>
+        <tr>
+            <td colspan="2"><center>{{date('d-M-y', strtotime($solicitud->fecha_hora))  }}</center></td>
+            <td colspan="2"><center>{{ $solicitud->agencia_nombre }} -- {{ $solicitud->departamento_nombre }}</center></td>
+        </tr>
+        <tr id="head">
+            <td><b>Cantidad</b></td>
+            <td><b>Descripción</b></td>
+            <td><b>Observacion</b></td>
+            <td><b>Cantidad de Entrega</b></td>
+        </tr>
+        @foreach($detalleSolicitud as $det)
+        <tr>
+            <td>{{ $det->cantidad }}</td>
+            <td>{{ $det->nombre }}</td>
+            <td>{{ $det->comentario }}</td>
+            <td></td>
+        </tr>
+        @endforeach
+    </table>
+
+    <br><br><br><br>
+    <p>___________________&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;___________________</p>
+    <p><b>Entregado por:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Recibido por:</b></p>
+    <p>Encargado de Suministros&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $solicitud->nombre_soli }}</p>
+
+
+</div>
+
+</body>
+</html>
