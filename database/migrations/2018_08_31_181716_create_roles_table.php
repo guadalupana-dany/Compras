@@ -19,8 +19,10 @@ class CreateRolesTable extends Migration
             $table->string('descripcion',100)->nullable();
             $table->boolean('estado')->default(1);
         });
-        DB::table('roles')->insert(array('id' => 1, 'nombre' => 'Administrador','descripcion'=>'Administrador'));
-        
+        DB::table('roles')->insert(array('id' => 1, 'nombre' => 'Administrador','descripcion'=>'Solo el admin podra tener permiso'));
+        DB::table('roles')->insert(array('id' => 2, 'nombre' => 'Verificador','descripcion'=>'Este rol le pertenece a la área de compras'));
+        DB::table('roles')->insert(array('id' => 3, 'nombre' => 'Departamento','descripcion'=>'Este rol es para los jefes de departamento'));
+
     }
 
     /**

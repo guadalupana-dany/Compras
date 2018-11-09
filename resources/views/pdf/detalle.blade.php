@@ -29,6 +29,14 @@
         height: 25px;
         background-color:silver;
     }
+    #total{
+        text-align: right;
+        font-weight: bold;
+    }
+    #numTol{
+        text-align: center;
+        font-weight: bold;
+    }
 </style>
 <body>
 <div>
@@ -50,19 +58,23 @@
             <td colspan="2"><center>{{ $solicitud->agencia_nombre }} -- {{ $solicitud->departamento_nombre }}</center></td>
         </tr>
         <tr id="head">
-            <td><b>Cantidad</b></td>
+            <td><b>Cantidad Entregada</b></td>
             <td><b>Descripción</b></td>
             <td><b>Observacion</b></td>
-            <td><b>Cantidad de Entrega</b></td>
+            <td><b>Gasto</b></td>
         </tr>
         @foreach($detalleSolicitud as $det)
         <tr>
             <td>{{ $det->cantidad }}</td>
             <td>{{ $det->nombre }}</td>
             <td>{{ $det->comentario }}</td>
-            <td></td>
+            <td>{{ $det->precio_total }}</td>
         </tr>
         @endforeach
+        <tr>
+            <td colspan="3" id="total">Total Gasto </td>
+            <td id="numTol">{{ $solicitud->total }}</td>
+        </tr>
     </table>
 
     <br><br><br><br>

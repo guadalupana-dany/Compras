@@ -13,20 +13,15 @@
                                 <div class="box-body">
                                     <div class="form-group">
                                         <div class="row">
-                                            <div class="col-md-3">
-                                                <label for="inputEmail3" class="control-label">Fecha:</label>
-                                                    <input type="text" class="form-control" v-model="fechaActual" readonly>
-                                            </div>
                                             <div class="col-md-5">
                                                 <label for="inputEmail3" >Nombre:</label>
-                                                <input type="email" class="form-control" v-model="nombre" placeholder="Ingrese nombre Completo ..">
+                                                <input type="text" class="form-control" v-model="nombre" placeholder="Ingrese su nombre">
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-3">
                                                 <label for="inputEmail3" class="control-label">Agencia:</label>
                                                 <vSelect
-
                                                     :on-search="selectAgencia"
                                                     label="nombre"
                                                     :options="ArrayAgencia"
@@ -37,7 +32,7 @@
                                             <div class="col-md-3">
                                                 <label for="inputEmail3" >Departamento:</label>
                                                 <select class="form-control" v-model="idDepartamento">
-                                                  <option v-for="depto in ArrayDepartamento" v-bind:value="depto.id" v-text="depto.nombre"></option>
+                                                  <option v-for="depto in ArrayDepartamento" :key="depto.id" v-bind:value="depto.id" v-text="depto.nombre"></option>
                                                 </select>
                                             </div>
                                         </div>
@@ -57,7 +52,7 @@
                                             <div class="col-md-2">
                                                 <label for="inputEmail3" >Producto:</label>
                                                 <select class="form-control" id="selectProducto">
-                                                    <option v-for="producto in ArrayProducto" v-bind:value="producto.id" v-text="producto.nombre" ></option>
+                                                    <option v-for="producto in ArrayProducto" :key="producto.id" v-bind:value="producto.id" v-text="producto.nombre" ></option>
                                                 </select>
                                             </div>
                                             <div class="col-md-2">
@@ -96,9 +91,7 @@
                                                     <tr v-for="(detalle,index) in arrayDetalleListo" :key="detalle.id">
                                                         <td v-text="index+1"></td>
                                                         <td v-text="detalle.nombreProducto"></td>
-                                                        <td>
-                                                        <input type="number" class="form-control" v-model="detalle.cantidad">
-                                                        </td>
+                                                        <td ><input type="number" class="form-control" v-model="detalle.cantidad"></td>
                                                         <td v-text="detalle.comentarioDetalle"></td>
                                                         <td><button class="btn btn-danger btn-sm" @click="eliminarDetalle(index)"><i class="icon-close"></i></button></td>
                                                     </tr>
@@ -194,41 +187,13 @@
                 }
 
         },
-        computed:{
-                isActived: function(){
-                    return this.pagination.current_page;
-                },
-                pagesNumber: function(){
-                    if(!this.pagination.to){
-                        return [];
-                    }
-
-                    var from = this.pagination.current_page -this.offset;
-                    if(from < 1){
-                        from = 1;
-                    }
-
-                    var to = from + (this.offset * 2);
-                    if(to >= this.pagination.last_page){
-                        to = this.pagination.last_page;
-                    }
-
-                    var pagesArray = [];
-                    while(from <= to){
-                        pagesArray.push(from);
-                        from++;
-                    }
-
-                    return pagesArray;
-                },
-
-        },
         components: {
             vSelect
          // Loading: VueLoading
     },
         methods :{
 
+            //metodo que busca las agencias
             selectAgencia(search,loading){
                 let me = this;
                 loading(true);
@@ -242,6 +207,7 @@
                 });
 
             },
+            //metodo que obtiene la agencia seleccionada
             getDatosAgencia(val1){
                 let me = this;
                 me.loading = true;
@@ -252,9 +218,7 @@
                         let array = response.data.departamento;
 
                         for(var i= 0; i < array.length;i++){
-                            console.log("ENtro")
                             me.ArrayDepartamento = array[i].departamento
-                            console.log(me.ArrayDepartamento);
                         }
 
                        // console.log(me.ArrayDepartamento.departamento);
@@ -266,9 +230,8 @@
                     me.ArrayAgencia = [];
                 }
             },
+            //metodo que busca la categoria
             selectCategoria(search,loading){
-                console.log("+++ selectAgencia ++");
-                console.log("SEARCH "+search+"  LOADING  "+loading);
                 let me = this;
                 loading(true);
                 var url = this.ruta + '/solicitud/selectCategoria?filtro='+search;
@@ -281,6 +244,7 @@
                 });
 
             },
+            //metodo que obtiene los datos de la categoria seleccionada
             getDatosCategoria(val1){
                 let me = this;
                 me.loading = true;
@@ -288,7 +252,6 @@
                     me.IdCategoria = val1.id;//almacenamos el id
                     var url = this.ruta + '/solicitud/selectProducto?id='+me.IdCategoria;
                     axios.get(url).then(function(response){
-
                            me.ArrayProducto = response.data.producto;
                     }).catch(function(error){
                         console.log("Error en listAgencia");
@@ -298,6 +261,7 @@
                     me.ArrayCategoria = [];
                 }
             },
+            //metodo que busca en el array del detalle si ya exite que ya no lo vuelba a ingresar
             encuentra(id){
                 //funcion que encuetra el articulo exites en el array
 
@@ -309,6 +273,7 @@
                 }
                 return sw;
             },
+            //metedo que agrega al detall
             agregarDetalle(){
                 let me = this;
 
@@ -327,25 +292,31 @@
                     })
                 }else
                 {
-                    me.arrayDetalleListo.push({
-                        idProducto: me.IdProducto,
-                        nombreProducto: me.nombreProducto,
-                        cantidad: me.cantidad,
-                        comentarioDetalle: me.comentarioDetalle
-                    });
-                    document.getElementById("cantidadProducto").value = "";
-                    me.cantidad = 0;
-                    me.nombreProducto = '';
-                    me.cantidad = 0;
-                    me.comentarioDetalle = '';
+                            me.arrayDetalleListo.push({
+                                idCategoria : me.IdCategoria,
+                                idProducto: me.IdProducto,
+                                nombreProducto: me.nombreProducto,
+                                cantidad: me.cantidad,
+                                comentarioDetalle: me.comentarioDetalle
+                            });
+
+                            document.getElementById("cantidadProducto").value = "";
+
+                            me.nombreProducto = '';
+                            //me.cantidad = 0;
+                            me.comentarioDetalle = '';
+
+
                    // me.ArrayCategoria = [];
                    // me.ArrayProducto = [];
                 }
             },
+            //metodo que elimina del detall
             eliminarDetalle(index){
                 let me=this;
                 me.arrayDetalleListo.splice(index,1);
             },
+            //metdo que valida el detalle que no este vacio
             validatDetalle(){
                 let me = this;
                 me.errorDetalle = 0;
@@ -357,6 +328,7 @@
                 if(me.arrayDetalle.length) me.errorDetalle = 1;
                 return me.errorDetalle;
             },
+            //metodo que envia la solicitud
             enviarSolicitud () {
 
                 let me = this;
@@ -368,39 +340,55 @@
                     })
                     return;
                 }
+                                me.$swal({
+                                            title: 'Enviar Solicitud?',
+                                            text: 'Revisar tu solicitud antes de enviar',
+                                            type: 'warning',
+                                            showCancelButton: true,
+                                            confirmButtonText: 'Si Enviar!',
+                                            cancelButtonText: 'No, Cancelar!',
+                                            showCloseButton: true,
+                                            showLoaderOnConfirm: true
+                                            }).then((result) => {
+                            if(result.value) {
+                                   me.btnEnviar = 1;
+                                    var url = me.ruta + '/solicitud/guardar';
+                                    axios.post(url,{
+                                        'nombre' : me.nombre,
+                                        'idDepartamento' : me.idDepartamento,
+                                        'Idagencia' : me.Idagencia,
+                                        'arrayDetalleListo' :  me.arrayDetalleListo,
+                                        'comentarioGeneral' :  me.comentarioGeneral
+                                    }).then(function(response) {
+
+                                            if(response.data.value == 1){
+                                                me.$swal({
+                                                    type: 'success',
+                                                    title: 'Enviado...',
+                                                    text: 'Tu solicitud a sido enviada!'
+                                                })
+                                            }else{
+                                                me.$swal({
+                                                    type: 'error',
+                                                    title: 'Error...',
+                                                    text: 'Ocurrio un error al enviar la solicitud!'
+                                                })
+                                            }
+                                            me.limpiarCampos();
+
+                                    }).catch(function(error){
+                                        console.log("Error en listAgencia");
+                                    });
+
+                            } else {
+                                this.$swal('Cancelado', 'Cancelaste el envio de la Solicitud', 'info')
+                            }
+                    })
                 //solicitud
-                me.btnEnviar = 1;
-                var url = this.ruta + '/solicitud/guardar';
-                axios.post(url,{
-                    'nombre' : me.nombre,
-                    'idDepartamento' : me.idDepartamento,
-                    'Idagencia' : me.Idagencia,
-                    'arrayDetalleListo' :  me.arrayDetalleListo,
-                    'comentarioGeneral' :  me.comentarioGeneral
 
 
-
-                }).then(function(response) {
-                    console.log(response);
-                    if(response.data.value == 1){
-                        me.$swal({
-                            type: 'success',
-                            title: 'Enviado...',
-                            text: 'Tu solicitud a sido enviada!'
-                        })
-                    }else{
-                        me.$swal({
-                            type: 'error',
-                            title: 'Error...',
-                            text: 'Ocurrio un error al enviar la solicitud!'
-                        })
-                    }
-                    me.limpiarCampos();
-
-                }).catch(function(error){
-                    console.log("Error en listAgencia");
-                });
             },
+            //metodo que valida el envio antes de que el usuario le de enviar
             validarEnvio(){
                 var error = 0;
                 var me = this;
@@ -432,9 +420,15 @@
                 me.ArrayCategoria = [];
                 me.ArrayProducto = [];
                 me.ArrayDepartamento = [];
-                window.location.reload(true);
-            }
+                let url = me.ruta + '/logout';
+                axios.post(url).then(function(response) {
+                        location.href = 'http://10.60.81.12:81/sisPlanilla/public/';
+                }).catch(function(error){
 
+                });
+               // location.href = 'http://10.60.81.12:81/sisPlanilla/public/logout';
+                //window.open('http://10.60.81.12:81/sisPlanilla/public/logout');
+            }
         },
         mounted() {
 

@@ -20,18 +20,33 @@
                     </ul>
                 </li>
                 @endif
-                @if(Auth::user()->hasRole('Administrador') or Auth::user()->hasRole('Solicitante'))
+                @if(Auth::user()->hasRole('Administrador') or Auth::user()->hasRole('Departamento'))
                 <li @click="menu=3" class="nav-item">
                     <a class="nav-link" href="#"><i class="fa fa-newspaper-o"></i>Solicitante</a>
                 </li>
                 @endif
-                @if(Auth::user()->hasRole('Administrador') or Auth::user()->hasRole('verificador'))
+                @if(Auth::user()->hasRole('Administrador') or Auth::user()->hasRole('Verificador'))
                 <li @click="menu=6" class="nav-item">
                 <a class="nav-link" href="#"><i class="fa fa-eye"></i>Solicitud Pendientes</a>
                 </li>
-                <li @click="menu=9" class="nav-item">
-                <a class="nav-link" href="#"><i class="fa  fa-file-text-o"></i>Todas las Solicitudes</a>
-                </li>
+                <li class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-wallet"></i> Reportes</a>
+                        <ul class="nav-dropdown-items">
+
+                            <li @click="menu=11" class="nav-item">
+                                <a class="nav-link" href="#"><i class="fa fa-home"></i>Control Bodega</a>
+                            </li>
+                            <li @click="menu=10" class="nav-item">
+                                <a class="nav-link" href="#"><i class="fa  fa-file-text-o"></i>Reporte Conta</a>
+                            </li>
+                            <li @click="menu=13" class="nav-item">
+                                <a class="nav-link" href="#"><i class="fa  fa-file-text-o"></i>Solicitudes Realizadas</a>
+                            </li>
+                            <li @click="menu=12" class="nav-item">
+                                    <a class="nav-link" href="#"><i class="fa  fa-file-text-o"></i>Detalle de Solicitudes</a>
+                            </li>
+                        </ul>
+                    </li>
                 @endif
                 @if(Auth::user()->hasRole('Administrador'))
                 <li class="nav-item nav-dropdown">

@@ -7,12 +7,14 @@ use App\Categoria;
 use App\Departamento;
 use App\Producto;
 use App\User;
+use App\ControlBodega;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 use Mockery\CountValidator\Exception;
 
 class CargasMasivasController extends Controller
@@ -23,6 +25,8 @@ class CargasMasivasController extends Controller
 
     }
 
+    //metodo que guarda los archivos que son cargados en la vista masivos
+    //TOdo esto solo el admin los puede ver
     public function store(Request $request){
         if (!$request->ajax()) return redirect('/');
         $request->user()->authorizeRoles(['Administrador']);
@@ -44,6 +48,8 @@ class CargasMasivasController extends Controller
                                $categoria->nombre = $row[$i];
                                $categoria->save();
                                $exito = 'CATEGORIA INSERTADA CON EXITO';
+
+
                                //DB::commit();
                            }catch(\Illuminate\Database\QueryException $e){
                                //DB::rollBack();
@@ -76,8 +82,28 @@ class CargasMasivasController extends Controller
                                 }
 
                     }
+                    if($accion == 'producto_Bodega'){
+                        // \Log::debug("0 ".$row[0] ." 1 ".$row[1]);
+                                 try{
+                                     // DB::beginTransaction();
+                                     $producto = new Producto();
+                                     $producto->idCategoria = utf8_encode($row[0]);
+                                     $producto->nombre = utf8_encode($row[1]);
+                                     $producto->save();
+                                     $exito = 'PRODUCTO DE BODEGA INSERTADO CON EXITO';
+                                     //DB::commit();
+                                 }catch(\Illuminate\Database\QueryException $e){
+                                     //DB::rollBack();
+                                     if($e->getCode() == '23000'){
+                                         $error .= ' YA HAY PRODUCTOS EXISTENTES EN LA BD';
+                                     }else{
+                                         $error = ' ERROR AL INSERTAR EN LA BD ';
+                                     }
+                                 }
+
+                    }
                     if($accion == 'agencias'){
-                        \Log::debug("agencias");
+
                         for($i = 0; $i < count($row); $i++){
                             try{
                                 // DB::beginTransaction();
@@ -97,8 +123,42 @@ class CargasMasivasController extends Controller
 
                         }
                     }
+                    if($accion == 'stock_Bodega'){
+
+                                 try{
+                                      DB::beginTransaction();
+                                      /*  $producto = new Producto();
+                                        $producto->idCategoria = utf8_encode($row[0]);
+                                        $producto->nombre = utf8_encode($row[1]);
+                                        $producto->save();
+                                      */
+
+                                        $control = new ControlBodega();
+                                        $control->idProducto = $row[0];
+                                        $control->can_mes_anterior = $row[1];
+                                        $control->pre_u_mes_anterior = $row[2];
+                                        $control->tot_mes_anterior = $row[3];
+                                        $control->can_mes_actual = $row[4];
+                                        $control->pre_u_mes_actual = $row[5];
+                                        $control->tot_mes_actual = $row[6];
+                                        $control->total_stock = $row[7];
+                                        $control->total_saldo = $row[8];
+                                        $control->total_unitario = $row[9];
+                                        $control->save();
+                                        $exito = 'PRODUCTO Y CONTROL DE BODEGA FUE INSERTADO CON EXITO';
+
+                                        DB::commit();
+                                 }catch(\Illuminate\Database\QueryException $e){
+                                     DB::rollBack();
+                                     if($e->getCode() == '23000'){
+                                         $error .= ' YA HAY PRODUCTOS EXISTENTES EN LA BD';
+                                     }else{
+                                         $error = ' ERROR AL INSERTAR EN LA BD ' . $e;
+                                     }
+                                 }
+
+                    }
                   }
-                \Log::debug($error);
 
                 fclose($fh);
             }
@@ -110,6 +170,7 @@ class CargasMasivasController extends Controller
             return ['error' => $error];
         }
         if($exito !=''){
+            $this->log('Create','Subio un archivo llamado ' . $accion,0,$request->user()->id);
             return ['exito' => $exito];
         }
     }
@@ -201,7 +262,7 @@ class CargasMasivasController extends Controller
         return ['agencia' => $agencias];
 
     }
-
+    //metodo que agrega departamentos a las agencias
     public function AddAgencias(Request $request){
         if (!$request->ajax()) return redirect('/');
         $request->user()->authorizeRoles(['Administrador']);
@@ -213,6 +274,7 @@ class CargasMasivasController extends Controller
             $departamento->save();
             $departamento->Agencia()->attach($request->arrayAgenciasSeleccionada);
             $exito .='DEPARTAMENTO AGREGADO CON EXITO';
+            $this->log('Create','Creo un departamento de Agencias',$departamento->id,$request->user()->id);
         }catch(\Illuminate\Database\QueryException $e){
             //DB::rollBack();
             if($e->getCode() == '23000'){
@@ -231,6 +293,7 @@ class CargasMasivasController extends Controller
 
     }
 
+    //funcion que manda correo cuando se crea un pedido
     public function senMail(){
 
         $user = User::findOrFail(1);
@@ -242,5 +305,11 @@ class CargasMasivasController extends Controller
             $m->to('oscar.orosco@micoopeguadalupana.com.gt','Oscar Orosco')->subject('Pedidos');
         });
     }
+
+    //metodo que guarda las acciones que realiza el usuario
+    private function log($tipo,$descripcion,$idObjeto,$idUser){
+        $mytime = Carbon::now('America/Guatemala');
+        DB::insert('insert into log (tipoAccion, descripcion, id_Objeto_Alterado, idUser, created_at) values (?, ?, ?, ?, ?)', [$tipo, $descripcion, $idObjeto, $idUser, $mytime]);
+   }
 
 }

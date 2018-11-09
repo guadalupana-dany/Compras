@@ -12,15 +12,13 @@
     <link rel="shortcut icon" href="img/miCoope.jfif">
     <title>Sistema Planilla - IT</title>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js">
-
     <link href="css/font-awesome.min.css" rel="stylesheet">
     <link href="css/simple-line-icons.min.css" rel="stylesheet">
-    <!-- Main styles for this application -->
     <link href="css/style.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
-    <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
-    <link href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.bootstrap4.min.css">
+
+    <link href="css/bootstrap.css">
+    <link href="css/dataTables.bootstrap4.min.css">
+    <link href="css/buttons.bootstrap4.min.css">
 
 
 
@@ -86,16 +84,16 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/pace.min.js"></script>
 
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.bootstrap4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.colVis.min.js"></script>
+    <script src="js/jquery.dataTables.min.js"></script>
+    <script src="js/dataTables.bootstrap4.min.js"></script>
+    <script src="js/dataTables.buttons.min.js"></script>
+    <script src="js/buttons.bootstrap4.min.js"></script>
+    <script src="js/jszip.min.js"></script>
+    <script src="js/pdfmake.min.js"></script>
+    <script src="js/vfs_fonts.js"></script>
+    <script src="js/buttons.html5.min.js"></script>
+    <script src="js/buttons.print.min.js"></script>
+    <script src="js/buttons.colVis.min.js"></script>
 <!-- Plugins and scripts required by all views -->
     <script src="js/Chart.min.js"></script>
 <!-- GenesisUI main scripts -->

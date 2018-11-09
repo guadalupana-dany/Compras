@@ -2,7 +2,7 @@
         <main class="main">
             <!-- Breadcrumb -->
             <ol class="breadcrumb">
-                <li class="breadcrumb-item">Home</li>
+                <li class="breadcrumb-item">Mi Coope Guadalupana</li>
             </ol>
             <div class="container-fluid">
                 <div class="card">
@@ -15,35 +15,35 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Opciones</th>
+                                    <th>No. Orden</th>
                                     <th>Solicitante</th>
                                     <th>Fecha</th>
                                     <th>Estado</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <template v-for="(sol,index) in solicitud">
-                                <tr >
-                                    <td v-text="index"></td>
-                                    <td>
-                                        <button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" title="ver detalle de la solicitud" @click="verSolicitud(sol.id)" >
-                                            <i class="fa fa-eye"></i>
-                                        </button>
-                                        <template v-if="sol.status">
-                                            <button type="button" class="btn btn-info btn-sm"  data-toggle="tooltip" title="Realizado" @click="realizado(sol.id)" >
-                                                <i class="icon-check"></i>
-                                            </button>
-                                        </template>
-                                        <button type="button" class="btn btn-danger btn-sm"  data-toggle="tooltip" title="Exportar Pdf" @click="descargarPdf(sol.id)">
-                                           <i class="fa fa-file-pdf-o"></i>
-                                        </button>
-                                    </td>
-                                    <td v-text="sol.nombre_solcitante"></td>
-                                    <td v-text="sol.fecha_hora"></td>
-                                    <td>
-                                        <template v-if="sol.status"><span class="badge badge-warning">Pendiente</span></template>
-                                        <template v-else><span class="badge badge-info">Realizado</span></template>
-                                    </td>
-                                </tr>
+                                <template v-for="(sol,index) in solicitud">  
+                                    <template v-if="!sol.status">                                
+                                            <tr >
+                                                <td v-text="index"></td>
+                                                <td>
+                                                    <button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" title="ver detalle de la solicitud" @click="verSolicitud(sol.id)" >
+                                                        <i class="fa fa-eye"></i>
+                                                    </button>
+
+                                                    <button type="button" class="btn btn-danger btn-sm"  data-toggle="tooltip" title="Exportar Pdf" @click="descargarPdf(sol.id)">
+                                                       <i class="fa fa-file-pdf-o"></i>
+                                                    </button>
+                                                </td>
+                                                <td v-text="sol.num_orden"></td>
+                                                <td v-text="sol.nombre_solcitante"></td>
+                                                <td v-text="sol.fecha_hora"></td>
+                                                <td>
+                                                    <template v-if="sol.status"><span class="badge badge-warning">Pendiente</span></template>
+                                                    <template v-else><span class="badge badge-info">Realizado</span></template>
+                                                </td>
+                                            </tr>
+                                   </template>
                                 </template>
                             </tbody>
                          </table>
@@ -99,12 +99,28 @@
                                             </div>
                                         </div>
                                         <br>
+                                        <div v-show="errorStock" class="form-group">
+                                            <div class="text-center text-error">
+                                                <div v-for="error in arrayErrorStock" :key="error" v-text="error">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div v-show="errorCampos" class="form-group">
+                                            <div class="text-center text-error">
+                                                <div v-for="error in arrayCamposVacios" :key="error" v-text="error">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
                                         <table class="table table-striped table-bordered" style="width:100%">
                                             <thead>
                                             <tr>
                                                 <th>#</th>
                                                 <th>Producto</th>
                                                 <th>Cantidad</th>
+                                                <th>Precio U.</th>
                                                 <th>Comentario</th>
                                             </tr>
                                             </thead>
@@ -114,11 +130,17 @@
                                                     <td v-text="index"></td>
                                                     <td v-text="sol.nombre"></td>
                                                     <td v-text="sol.cantidad"></td>
+                                                    <td v-text="sol.precio_unitario"></td>
                                                     <td v-text="sol.comentario"></td>
                                                 </tr>
                                             </template>
                                             </tbody>
                                         </table>
+                                        <br>
+                                         <div class="row">
+                                            <div class="col-sm-4"><b>Total:</b></div>
+                                            <div class="col-sm-6"><b>Q. {{ total = calcularTotal }}</b></div>
+                                        </div>
 
                                     </div>
                                 </div>
@@ -152,18 +174,29 @@
                 modal : 0,
                 detalleSolicitud : [],
                 oneSolicitud : [],
+                total : 0,
+                arrayErrorStock : [], //este array es el que va contener los productos que no tienen la cantidad que es en el stock
+                errorStock : 0, //variable que ve si hay errores de stock
+
+                arrayCamposVacios : [],
+                errorCampos : 0,
                 }
 
         },
         computed:{
-
+                calcularTotal: function(){
+                    var resultado = 0;
+                    for(var i=0;i<this.detalleSolicitud.length;i++){
+                        resultado = resultado+(this.detalleSolicitud[i].precio_unitario*this.detalleSolicitud[i].cantidad);
+                    }
+                    return resultado;
+                },
         },
         components: {
             Loading: VueLoading
         },
         methods : {
             open() {
-
                 let loader = this.$loading.show();
                 setTimeout(() => loader.hide(),1000);
             },
@@ -180,8 +213,7 @@
                             console.log(error);
                     });
                    // me.dataTable();
-
-                },
+                                },
             verSolicitud(id){
                 let me = this;
                 me.modal = 1;
@@ -194,33 +226,22 @@
                     .catch(function (error){
                         console.log(error);
                     });
+
             },
             cerrarModal(){
                 this.modal = 0;
                 this.detalleSolicitud = [];
                 this.oneSolicitud = [];
-            },
-            realizado(id){
-
-                let me = this;
-                let url = me.ruta + '/solicitud/solicitudListo/'+id;
-                axios.post(url).then(function(response){
-                        //console.log(response.data);
-                        me.$swal({
-                            type: 'success',
-                            title: 'SOLICITUD...',
-                            text: 'Tu solicitud a sido despachada!'
-                        })
-                        me.getDetalle();
-                    })
-                    .catch(function (error){
-                        console.log(error);
-              });
-
+                this.errorStock = 0;
+                this.arrayErrorStock = [];
+                this.errorCampos =0;
             },
             descargarPdf(id){
                 window.open('http://10.60.81.12:81/sisPlanilla/public/solicitud/pdf/'+id,'_blank');
-            }
+            },
+
+
+
         },
         mounted() {
             let me = this;
@@ -234,7 +255,11 @@
 
                 table.buttons().container()
                     .appendTo( '#example_wrapper .col-md-6:eq(0)' );
-            },500);
+            },800);
+          /*  setInterval(function() {
+                me.getDetalle();
+            },1000);*/
+
 
         },
     }

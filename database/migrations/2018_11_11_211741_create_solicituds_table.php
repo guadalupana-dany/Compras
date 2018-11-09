@@ -20,7 +20,9 @@ class CreateSolicitudsTable extends Migration
             $table->integer('idAge_depto')->unsigned();
             $table->boolean('status')->default(1);
             $table->foreign('idAge_depto')->references('id')->on('agencia_departamento')->onDelete('cascade');
-            $table->string('comentario',100);
+            $table->string('comentario',200);
+            $table->integer("num_orden");
+            $table->decimal('total_gasto', 11,2)->nullable();
             $table->integer('idUser')->unsigned();
             $table->foreign('idUser')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

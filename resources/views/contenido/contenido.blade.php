@@ -35,10 +35,21 @@
  <template v-if="menu==8">
       <rol :ruta="ruta"></rol>
  </template>
- <template v-if="menu==9">
-     <allsolicitud :ruta="ruta"></allsolicitud>
+ <template v-if="menu==10">
+    <reporteconta :ruta="ruta"></reporteconta>
  </template>
 
+ <template v-if="menu==11">
+        <productobodega :ruta="ruta"></productobodega>
+ </template>
+
+ <template v-if="menu==12">
+        <detallesolicitud :ruta="ruta"></detallesolicitud>
+ </template>
+
+ <template v-if="menu==13">
+    <solicitudesall :ruta="ruta"></solicitudesall>
+</template>
 
 
 @endsection

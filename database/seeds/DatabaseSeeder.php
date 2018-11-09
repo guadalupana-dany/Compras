@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
     {
         // $this->call(UsersTableSeeder::class);
         // La creación de datos de roles debe ejecutarse primero
-        $this->call(RoleTableSeeder::class);
+        //$this->call(RoleTableSeeder::class);
         // Los usuarios necesitarán los roles previamente generados
         $this->call(UserTableSeeder::class);
         //PARA CORRER LOS SIDER php artisan migrate:refresh --seed

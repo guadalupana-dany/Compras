@@ -42,6 +42,8 @@
                                                         <option value="categoria">Categorias</option>
                                                         <option value="producto">Producto</option>
                                                         <option value="agencias">Agencias</option>
+                                                        <option value="producto_Bodega">Productos Bodega</option>
+                                                        <option value="stock_Bodega">Stock Bodega</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-md-3">
@@ -76,7 +78,7 @@
                                                     <div class="col-md-6">
                                                     <label>Seleccione las Agencias en las que pertenece:</label>
                                                         <select multiple class="form-control" v-model="arrayAgenciasSeleccionada">
-                                                           <option v-for="agencia in arrayAgencias" v-bind:value="agencia.id" v-text="agencia.nombre"></option>
+                                                           <option v-for="agencia in arrayAgencias" :key="agencia.id" v-bind:value="agencia.id" v-text="agencia.nombre"></option>
 
                                                         </select>
                                                     </div>
@@ -113,7 +115,7 @@
         data(){
             return{
                 addDepartamento : 0,
-                tipoCarga : 'categoria',
+                tipoCarga : 'categoria', //var que ver el tipo de carga se ve a subir
                 file : '',
 
                 //var para capturar los errores
@@ -137,6 +139,7 @@
         components: {
     },
         methods:{
+            //metodo que sirve para ocultar o mostrar el formulario para crear departamentos
             viewDepartamento(){
                 this.addDepartamento = !this.addDepartamento;
             },
@@ -228,6 +231,7 @@
                     console.log("Error en listAgencia");
                 });
             },
+            //metodo que valida los departamentos que no vallan nada vacio
             validarDepto(){
                 this.erroresAg = 0;
                 this.errorArraAg =[];

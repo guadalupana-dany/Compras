@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Role;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 
 class UserController extends Controller
 {
+
 
     public function __construct()
     {
@@ -65,7 +67,8 @@ class UserController extends Controller
               $user = User::find($request->id);
               $user->password = bcrypt($request->password);
               $user->update();
-    }
+              $this->log('updatePassword','Modifico pass usuario',$user->id,$request->user()->id);
+            }
 
     public function store(Request $request){
         if (!$request->ajax()) return redirect('/');
@@ -79,6 +82,7 @@ class UserController extends Controller
             $user->estado = '1';
             $user->save();
             $user->roles()->attach($request->data);
+            $this->log('Create','Inserto un nuevo usuario',$user->id,$request->user()->id);
             DB::commit();
         }catch(Exception $e){
             DB::rollBack();
@@ -97,6 +101,8 @@ class UserController extends Controller
         $user->estado = '1';
         $user->update();
         $user->roles()->sync($request->data);
+
+        $this->log('Update','Actualizo datos de usuario',$user->id,$request->user()->id);
         DB::commit();
         }catch(Exception $e){
             DB::rollBack();
@@ -108,6 +114,7 @@ class UserController extends Controller
          $user = User::find($request->id);
          $user->estado = '0';
          $user->save();
+         $this->log('Desactivar','Desactivo un usuario',$user->id,$request->user()->id);
     }
 
     public function activar(Request $request){
@@ -115,5 +122,11 @@ class UserController extends Controller
         $user = User::find($request->id);
         $user->estado = '1';
         $user->save();
+        $this->log('Activar','Activo un usuario',$user->id,$request->user()->id);
+   }
+
+   private function log($tipo,$descripcion,$idObjeto,$idUser){
+    $mytime = Carbon::now('America/Guatemala');
+    DB::insert('insert into log (tipoAccion, descripcion, id_Objeto_Alterado, idUser, created_at) values (?, ?, ?, ?, ?)', [$tipo, $descripcion, $idObjeto, $idUser, $mytime]);
    }
 }

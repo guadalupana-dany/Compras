@@ -27,6 +27,7 @@
         "v-tooltip": "^2.0.0-rc.33",
         "vue-full-loading": "^1.2.1",
         "vue-loading-overlay": "^2.2.1",
-        "vue-select": "^2.5.1"
+        "vue-select": "^2.5.1",
+        "vuejs-datepicker": "^1.5.3"
     }
 }

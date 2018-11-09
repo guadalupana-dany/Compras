@@ -177,7 +177,7 @@
                     'to' : 0,
                 },
 
-
+                //variables que son llenados dependiendo de la info que queramos
                 arrayCategoria : [],
                 arrayProducto : [],
                 arrayAgencia : [],
@@ -225,7 +225,7 @@
                 me.pagination.current_page = page;
                 me.cargaDatos(this.cataSeleccionado,page);
             },
-
+           //metod que nos muestra todos los datos que emos cargado
             cargaDatos(op,page){
                 let me = this;
                 me.cataSeleccionado = op;

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddNumordenToSolicituds extends Migration
+class AddProveedorToControl extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class AddNumordenToSolicituds extends Migration
      */
     public function up()
     {
-        Schema::table('solicituds', function (Blueprint $table) {
-            //
-            $table->integer("num_orden");
+        Schema::table('control_bodega_', function (Blueprint $table) {
+
+            $table->String('proveedor')->nullable();
+
         });
     }
 
@@ -26,8 +27,6 @@ class AddNumordenToSolicituds extends Migration
      */
     public function down()
     {
-        Schema::table('solicituds', function (Blueprint $table) {
-            //
-        });
+
     }
 }

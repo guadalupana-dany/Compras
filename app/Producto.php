@@ -15,4 +15,8 @@ class Producto extends Model
     public function detalleSolicitud(){
         return $this->hasMany('App\DetalleSolicitud');
     }
+
+    public function ControlBodega(){
+        return $this->hasMany('App\ControlBodega');
+    }
 }

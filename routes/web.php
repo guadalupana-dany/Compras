@@ -8,9 +8,30 @@ Auth::routes();
 
 Route::get('/main',function(){
     if(Auth::user()){
-        return view('contenido.contenido');
+
+
+     /*
+        $fechaActual = new DateTime();
+        $fecha = date('Y-m-j');
+        $nuevafecha = strtotime ( '+5 day' , strtotime ( $fecha ) ) ;
+        $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
+        $solicitudes = \App\Solicitud::where('idUser','=',Auth::user()->id)
+                    ->select('created_at')->orderby('created_at','DESC')->take(1)->first();
+
+        if($solicitudes->created_at->format('Y-m') == $fechaActual->format('Y-m')){
+         return view('errorSolicitud');
+        }else{
+            if(($fechaActual->format('Y-m-d') <=  $nuevafecha) and (!Auth::user()->prioridad_pedido)){
+                    return view('pasadoDelMesSolicitud');
+            }else{
+                    return view('contenido.contenido');
+            }
+
+        }*/
+         return view('contenido.contenido');
+
     }
-    return view('welcome');
+        return view('/');
 })->name('main');
 // <a href="{{ route('register') }}">Register</a>
 
@@ -45,11 +66,14 @@ Route::get('/solicitud/selectCategoria','SolicitudController@selectCategoria');
 Route::get('/solicitud/selectProducto','SolicitudController@selectProducto');
 Route::get('/solicitud/getAllSolicitud','SolicitudController@getAllSolicitud');
 Route::get('/solicitud/getSolicitud/{id}','SolicitudController@getSolicitud');
-Route::post('/solicitud/solicitudListo/{id}','SolicitudController@solicitudListo');
+Route::post('/solicitud/solicitudListo','SolicitudController@solicitudListo');
 Route::get('/solicitud/pdf/{id}','SolicitudController@pdf');
-
-
-
+Route::get('/solicitud/productoBodega','SolicitudController@productoBodega');
+Route::post('/solicitud/updateProductoBodega','SolicitudController@updateProductoBodega');
+Route::get('/solicitud/getAllDetaelleSolicitud','SolicitudController@getAllDetaelleSolicitud');
+Route::get('/solicitud/validarExitenciaProducto','SolicitudController@validarExitenciaProducto');
+Route::get('/solicitud/getUser','SolicitudController@getUser');
+Route::get('/solicitud/exportExecel','SolicitudController@exportExecel');
 
 
 
