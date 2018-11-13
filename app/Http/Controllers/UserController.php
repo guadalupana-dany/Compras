@@ -7,7 +7,7 @@ use App\User;
 use App\Role;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -73,6 +73,7 @@ class UserController extends Controller
     public function store(Request $request){
         if (!$request->ajax()) return redirect('/');
         $request->user()->authorizeRoles(['Administrador']);
+        $pass =  $request->password;
         try{
             DB::beginTransaction();
             $user = new User();
@@ -82,6 +83,15 @@ class UserController extends Controller
             $user->estado = '1';
             $user->save();
             $user->roles()->attach($request->data);
+
+            Mail::send('emails.newuser',['user' => $user,'pass' => $pass ],function($m) use ($user){
+                //AQUIEN MANDA EL CORREO
+                $m->from('alerta@micoopeguadalupana.com.gt','MicoopeGuadalupana');
+                //AQUIEN LE LLEGA EL CORREO
+                $m->to($user->email,$user->name)->subject('Nuevo Usuario');
+            });
+
+
             $this->log('Create','Inserto un nuevo usuario',$user->id,$request->user()->id);
             DB::commit();
         }catch(Exception $e){

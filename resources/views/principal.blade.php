@@ -68,8 +68,8 @@
 </div>
 
 <footer class="app-footer">
-    <span><a href="http://www.incanatoit.com/">IncanatoIT</a> &copy; 2017</span>
-    <span class="ml-auto">Desarrollado por Dany Diaz Desarrollador Web Cooperativa Guadalupana MICOOPE</span>
+    <span><a href="#">Guadalupana</a> &copy; 2018</span>
+    <span class="ml-auto">Cooperativa Guadalupana MICOOPE</span>
 </footer>
 
 

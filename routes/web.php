@@ -8,7 +8,13 @@ Auth::routes();
 
 Route::get('/main',function(){
     if(Auth::user()){
-
+        if(Auth::user()->estado){
+            return view('contenido.contenido');
+        }else{
+            //valida que el usuario que se loguea verifica si es un usuario activo si no lo desloguea
+            Auth::logout();
+            return redirect('/');
+       }
 
      /*
         $fechaActual = new DateTime();
@@ -26,9 +32,8 @@ Route::get('/main',function(){
             }else{
                     return view('contenido.contenido');
             }
-
         }*/
-         return view('contenido.contenido');
+
 
     }
         return redirect('/');
