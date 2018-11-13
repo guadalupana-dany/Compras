@@ -10,7 +10,7 @@
     <meta name="keyword" content="Sistema ventas Laravel Vue Js, Sistema compras Laravel Vue Js">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="shortcut icon" href="img/miCoope.jfif">
-    <title>Sistema Planilla - IT</title>
+    <title>Sistema Compras </title>
 
     <link href="css/font-awesome.min.css" rel="stylesheet">
     <link href="css/simple-line-icons.min.css" rel="stylesheet">
