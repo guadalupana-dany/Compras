@@ -31,7 +31,7 @@ Route::get('/main',function(){
          return view('contenido.contenido');
 
     }
-        return view('/');
+        return redirect('/');
 })->name('main');
 // <a href="{{ route('register') }}">Register</a>
 
