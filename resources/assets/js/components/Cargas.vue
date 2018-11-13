@@ -168,7 +168,6 @@
 
                 axios.post(url,formData,config)
                 .then(function(response){
-                    console.log(response.data.error);
                     if(response.data.error){
                         me.errorCargaMasiva = response.data.error;
                         setTimeout(function(){

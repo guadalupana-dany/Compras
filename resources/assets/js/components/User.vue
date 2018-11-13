@@ -292,7 +292,7 @@
     },
         methods : {
             open() {
-               
+
                     let loader = this.$loading.show();
                     setTimeout(() => loader.hide(),1000)
             },
@@ -309,7 +309,6 @@
                     me.pagination= respuesta.pagination;
                 })
                 .catch(function (error){
-                    console.log(error);
                 });
             },
             cambiarPaginacion(page,buscar,criterio){
@@ -363,7 +362,6 @@
 
                     },10000);
                     me.isLoading = false
-                    console.log(me.arrayRoles);
                 })
                 .catch(function (error){
                     console.log(error);
@@ -403,7 +401,6 @@
                        me.checkRoles.push(chekR[i].value);
                     }
                 }
-                console.log(me.checkRoles);
 
                if(me.validarUsuario()){
                     return;
@@ -417,7 +414,6 @@
                     'password': this.password,
                     'data' : this.checkRoles
                 }).then(function (response) {
-                    console.log(response);
                    me.$swal(
                     'Usuario Actualizado',
                     'Exitosamente!',
@@ -509,7 +505,6 @@
                 this.errorMsjUsuario = [];
                 if(!this.password) this.errorMsjUsuario.push('ingrese el Password');
                 if(this.errorMsjUsuario.length) this.errorUsuario = 1;
-                console.log(this.errorUsuario);
                 return this.errorUsuario;
             },
             //metod que actualiza el password
@@ -550,7 +545,6 @@
                                         let me = this;
                                         this.listadoRoles();
                                         setTimeout(function(){
-                                            console.log("entro")
                                             me.modal = 1;
                                             me.tituloModal = "Create Usuario";
                                             me.tipoAccion = 1;

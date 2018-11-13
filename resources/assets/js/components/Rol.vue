@@ -233,7 +233,6 @@
                     'nombre': this.nombre,
                     'descripcion': this.descripcion
                 }).then(function (response) {
-                    console.log(response);
                    me.$swal(
                     'Rol Insertado',
                     'Exitosamente!',
