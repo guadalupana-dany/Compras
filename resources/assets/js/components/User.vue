@@ -35,6 +35,7 @@
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Roles</th>
+                                    <th>Privilegios</th>
                                     <th>Estado</th>
                                 </tr>
                             </thead>
@@ -64,6 +65,14 @@
                                         <div v-for="rol in user.roles" :key="rol.id" >
                                            - {{ rol.nombre }}
                                         </div>
+                                    </td>
+                                    <td>
+                                        <template v-if="user.prioridad_pedido">
+                                            <span class="badge badge-success">SI</span>
+                                        </template>
+                                        <template v-else>
+                                            <span class="badge badge-danger">NO</span>
+                                        </template>
                                     </td>
                                     <td>
                                         <template v-if="user.estado">
@@ -121,6 +130,23 @@
                                     <label class="col-md-3 form-control-label" for="email-input">Password</label>
                                     <div class="col-md-9">
                                         <input type="password" class="form-control" v-model="password" placeholder="Enter Password" >
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="email-input">Previlegiado</label>
+                                    <div class="col-md-9">
+                                        <div class="form-check">
+                                            <div v-if="prioridad_pedido">
+                                                <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input" v-model="prioridad_pedido" checked>
+                                                </label>
+                                            </div>
+                                            <div v-else>
+                                                <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input" v-model="prioridad_pedido" >
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                          <div class="form-group row">
@@ -245,6 +271,7 @@
                 email : '',
                 password : '',
                 getRolUser : [],//los roles que tiene asignado el usuario
+                prioridad_pedido : 0,
 
                 //variables para los errores en el formulario ingreso usuario
                 errorUsuario : 0,
@@ -287,9 +314,9 @@
                 },
 
         },
-    components: {
-        Loading: VueLoading
-    },
+        components: {
+            Loading: VueLoading
+        },
         methods : {
             open() {
 
@@ -412,6 +439,7 @@
                     'name': this.name,
                     'email': this.email,
                     'password': this.password,
+                    'prioridad_pedido' : this.prioridad_pedido,
                     'data' : this.checkRoles
                 }).then(function (response) {
                    me.$swal(
@@ -571,6 +599,7 @@
                                         me.email = data['email'];
                                         me.idusuario = data['id'];
                                         me.password = data['password'];
+                                        me.prioridad_pedido = data['prioridad_pedido'];
                                          }, 300);
                                         break;
                                     }
@@ -600,6 +629,7 @@
                 this.name = '';
                 this.email = '';
                 this.password = '';
+                this.prioridad_pedido = 0;
                 this.errorMsjUsuario = [];
                 this.errorUsuario = 0;
                 this.checkRoles =[];

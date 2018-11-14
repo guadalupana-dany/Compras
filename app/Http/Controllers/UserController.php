@@ -24,10 +24,10 @@ class UserController extends Controller
         $buscar = $request->buscar;
         $criterio = $request->criterio;
         if($buscar == ''){
-            $user = User::select('id','name','email','password','estado')
+            $user = User::select('id','name','email','password','estado','prioridad_pedido')
             ->orderBy('id','desc')->paginate(10);;
         }else{
-            $user = User::select('id','name','email','password','estado')
+            $user = User::select('id','name','email','password','estado','prioridad_pedido')
             ->where($criterio,'like', '%' . $buscar .'%')
             ->orderBy('id','desc')->paginate(10);
         }
@@ -68,7 +68,7 @@ class UserController extends Controller
               $user->password = bcrypt($request->password);
               $user->update();
               $this->log('updatePassword','Modifico pass usuario',$user->id,$request->user()->id);
-            }
+    }
 
     public function store(Request $request){
         if (!$request->ajax()) return redirect('/');
@@ -108,7 +108,7 @@ class UserController extends Controller
         $user = User::find($request->id);
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->estado = '1';
+        $user->prioridad_pedido = $request->prioridad_pedido;
         $user->update();
         $user->roles()->sync($request->data);
 
