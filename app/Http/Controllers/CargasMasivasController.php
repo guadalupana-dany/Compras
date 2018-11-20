@@ -175,6 +175,18 @@ class CargasMasivasController extends Controller
         }
     }
 
+    public function categoria(Request $request){
+        $categoria = new Categoria();
+        $categoria->nombre = $request->descCategoria;
+        $categoria->save();
+    }
+    public function producto(Request $request){
+        $producto = new Producto();
+        $producto->idCategoria = $request->IdCategoria;
+        $producto->nombre = $request->descProducto;
+        $producto->save();
+    }
+
     public function MostrarData(Request $request){
         if (!$request->ajax()) return redirect('/');
         $request->user()->authorizeRoles(['Administrador']);

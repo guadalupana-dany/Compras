@@ -61,6 +61,8 @@ Route::post('/upLoad/MostrarData', 'CargasMasivasController@MostrarData');
 Route::get('/upLoad/ListAgencias', 'CargasMasivasController@ListAgencias');
 Route::post('/upLoad/AddAgencias', 'CargasMasivasController@AddAgencias');
 Route::get('/upLoad/senMail', 'CargasMasivasController@senMail');
+Route::post('/upLoad/categoria', 'CargasMasivasController@categoria');
+Route::post('/upLoad/producto', 'CargasMasivasController@producto');
 
 
 //Route::resource('solicitud','SolicitudController');
