@@ -53,6 +53,8 @@
 <template v-if="menu==14">
     <solicitudesrechazadas :ruta="ruta"></solicitudesrechazadas>
 </template>
-
+<template v-if="menu==15">
+    <requisicioncliente :ruta="ruta"></requisicioncliente>
+</template>
 
 @endsection

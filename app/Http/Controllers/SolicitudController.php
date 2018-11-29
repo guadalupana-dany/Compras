@@ -221,11 +221,27 @@ class SolicitudController extends Controller
     }
 
     }
+        //metodo que muestra todas las solicitudes que se encuentra de cada cliente
+    public function getAllSolicitudCliente(Request $request){
+
+        if (!$request->ajax()) return redirect('/');
+        $request->user()->authorizeRoles(['Administrador','verificador','Departamento']);
+
+        $solicitud = Solicitud::join('agencia_departamento','solicituds.idAge_depto','=','agencia_departamento.id')
+        ->join('agencias','agencia_departamento.agencia_id','=','agencias.id')
+        ->join('departamentos','agencia_departamento.departamento_id','=','departamentos.id')
+        ->select('solicituds.id','solicituds.nombre_solcitante','solicituds.status','solicituds.total_gasto','solicituds.fecha_hora','solicituds.num_orden','agencias.nombre as nombre_agencia','departamentos.nombre as nombre_Depto')
+        ->where('solicituds.idUser','=',$request->user()->id)
+        ->orderby('solicituds.fecha_hora','DESC')->get();
+
+
+        return ['solicitud' => $solicitud];
+    }
     //metodo que muestra todas las solicitudes que se encuentra
     public function getAllSolicitud(Request $request){
 
         if (!$request->ajax()) return redirect('/');
-        $request->user()->authorizeRoles(['Administrador','verificador']);
+        $request->user()->authorizeRoles(['Administrador','verificador','Departamento']);
 
         /*$solicitud = DetalleSolicitud::join('solicituds','detalle_solicituds.idSolicitud','=','solicituds.id')
             ->join('users','solicituds.IdUser','=','users.id')
@@ -315,7 +331,7 @@ class SolicitudController extends Controller
     //metodo que obtiene la solicitudes
     public function getSolicitud(Request $request,$id){
         if (!$request->ajax()) return redirect('/');
-        $request->user()->authorizeRoles(['Administrador','verificador']);
+        $request->user()->authorizeRoles(['Administrador','verificador','Departamento']);
         $solicitud = Solicitud::join('agencia_departamento','agencia_departamento.id','=','solicituds.idAge_depto')
             ->join('agencias','agencias.id','=','agencia_departamento.agencia_id')
             ->join('departamentos','departamentos.id','=','agencia_departamento.departamento_id')
@@ -339,7 +355,7 @@ class SolicitudController extends Controller
        // \Log::debug($request);
         try{
             DB::beginTransaction();
-            $request->user()->authorizeRoles(['Administrador','Verificador']);
+           $request->user()->authorizeRoles(['Administrador','Verificador']);
             $solicitud = Solicitud::find($request->idSolicitud);
             $solicitud->status = 2;
             $solicitud->update();
@@ -352,6 +368,15 @@ class SolicitudController extends Controller
                 $this->log('Update','Se rechazo detalle de solicitud', $detalleS->id, $request->user()->id);
 
             }
+
+            $users = User::find($solicitud->idUser);
+        //SE CREA LA PLANTILLA Y [] DENTRO DE ESTO LE PASAMOS LOS PARAMETROS A LA PLANTILLA PARA QUE SEA DINAMICO
+            Mail::send('emails.solicitudrechazado',['users' => $users,'numero_orden' => $solicitud->num_orden],function($m) use ($users){
+            //AQUIEN MANDA EL CORREO
+            $m->from('alerta@micoopeguadalupana.com.gt','MicoopeGuadalupana');
+
+            $m->to($users->email,$users->name)->subject('Requisicion Rechazada');
+          });
 
             DB::commit();
         }catch(Exception $e){

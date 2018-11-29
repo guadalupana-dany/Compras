@@ -17,7 +17,9 @@ Vue.component('productobodega', require('./components/productobodega.vue'));
 Vue.component('detallesolicitud', require('./components/detallesolicitud.vue'));
 Vue.component('solicitudesall', require('./components/solicitudesAll.vue'));
 Vue.component('solicitudesrechazadas', require('./components/solicitudesrechazadas.vue'));
-//
+Vue.component('requisicioncliente', require('./components/requisicioncliente.vue'));
+
+//requisicioncliente
 
 const app = new Vue({
     el: '#app',

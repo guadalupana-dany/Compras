@@ -24,6 +24,9 @@
                 <li @click="menu=3" class="nav-item">
                     <a class="nav-link" href="#"><i class="fa fa-newspaper-o"></i>Requisición</a>
                 </li>
+                <li @click="menu=15" class="nav-item">
+                    <a class="nav-link" href="#"><i class="fa fa-newspaper-o"></i>Mis Requi.</a>
+                </li>
                 @endif
                 @if(Auth::user()->hasRole('Administrador') or Auth::user()->hasRole('Verificador'))
                 <li @click="menu=6" class="nav-item">
