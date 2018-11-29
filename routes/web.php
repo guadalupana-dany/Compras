@@ -81,7 +81,7 @@ Route::get('/solicitud/getAllDetaelleSolicitud','SolicitudController@getAllDetae
 Route::get('/solicitud/validarExitenciaProducto','SolicitudController@validarExitenciaProducto');
 Route::get('/solicitud/getUser','SolicitudController@getUser');
 Route::get('/solicitud/exportExecel','SolicitudController@exportExecel');
-
+Route::post('/solicitud/solicitudRechazada','SolicitudController@solicitudRechazada');
 
 
 Route::get('/testing',function(){

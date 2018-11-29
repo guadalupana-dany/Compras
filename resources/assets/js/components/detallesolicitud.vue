@@ -32,9 +32,10 @@
                             <div class="col-md-2">
                                 <label for=""><b>Estado:</b></label>
                                 <select class="form-control" v-model="estado">
-                                    <option value="2">Todos</option>
+                                    <option value="3">Todos</option>
                                     <option value="1">Prendiente</option>
                                     <option value="0">Realizado</option>
+                                    <option value="2">Rechazadas</option>
                                 </select>
                             </div>
                              <div class="col-md-2">
@@ -88,8 +89,9 @@
                                     <td v-text="sol.nombre_agencia"></td>
                                     <td v-text="sol.departamento_nombre"></td>
                                     <td>
-                                        <template v-if="sol.status"><span class="badge badge-warning">Pendiente</span></template>
-                                        <template v-else><span class="badge badge-info">Realizado</span></template>
+                                        <template v-if="sol.status == 1"><span class="badge badge-warning">Pendiente</span></template>
+                                        <template v-else-if="sol.status == 1"><span class="badge badge-info">Realizado</span></template>
+                                        <template v-else-if="sol.status == 2"><span class="badge badge-danger">Rechazado</span></template>
                                     </td>
                                 </tr>
                                 </template>
@@ -138,7 +140,7 @@
                 //variables para filtrar
                 fechaFin : '',
                 fechaInicio: '',
-                estado : 2,
+                estado : 3,
                 ArrayUsers : [],
                 idUsuario : 0,
                 orden : 0,

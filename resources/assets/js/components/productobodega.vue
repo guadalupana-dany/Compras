@@ -16,6 +16,9 @@
                         </button>
                     </div>
                     <div class="card-body">
+                        <div style="color:red">
+                            <h3 >Total Saldo Global : <strong>{{ calcularTotalGlobal }}</strong></h3>
+                        </div>
                        <table id="example" class="table table-striped table-bordered" style="width:100%">
                             <thead>
                                 <tr>
@@ -291,6 +294,15 @@
         computed:{
                 calcularTotal: function(){
                      var resultado = this.total_pago / this.cantidadUpdate;
+                    return resultado;
+                },
+                calcularTotalGlobal: function(){
+                     var resultado = 0;
+                    for(var i=0;i<this.productoBodega.length;i++){
+
+                        resultado = (resultado) + parseFloat(this.productoBodega[i].total_saldo);
+                    }
+
                     return resultado;
                 },
         },

@@ -23,7 +23,7 @@
                             </thead>
                             <tbody>
                                 <template v-for="(sol,index) in solicitud">
-                                    <template v-if="sol.status == 0">
+                                    <template v-if="sol.status == 2">
                                             <tr >
                                                 <td v-text="index"></td>
                                                 <td>
@@ -39,8 +39,7 @@
                                                 <td v-text="sol.nombre_solcitante"></td>
                                                 <td v-text="sol.fecha_hora"></td>
                                                 <td>
-                                                    <template v-if="sol.status"><span class="badge badge-warning">Pendiente</span></template>
-                                                    <template v-else><span class="badge badge-info">Realizado</span></template>
+                                                  <span class="badge badge-danger">Rechazadas</span>
                                                 </td>
                                             </tr>
                                    </template>
@@ -121,7 +120,8 @@
                                                 <th>Producto</th>
                                                 <th>Cantidad</th>
                                                 <th>Precio U.</th>
-                                                <th>Comentario</th>
+                                                <th>Corr./Come.</th>
+                                                <th>Com. Rechazo</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -132,6 +132,7 @@
                                                     <td v-text="sol.cantidad"></td>
                                                     <td v-text="sol.precio_unitario"></td>
                                                     <td v-text="sol.comentario"></td>
+                                                    <td v-text="sol.comenRechazo"></td>
                                                 </tr>
                                             </template>
                                             </tbody>
@@ -221,6 +222,7 @@
                 axios.get(url).then(function(response){
                         //console.log(response.data);
                         me.detalleSolicitud = response.data.detalleSolicitud;
+                        console.log(me.detalleSolicitud)
                         me.oneSolicitud = response.data.solicitud;
                     })
                     .catch(function (error){

@@ -218,8 +218,7 @@ class SolicitudController extends Controller
             $controlBodega->total_unitario = ($det['total_saldo'] + $request->total_pago)/( $det['total_stock'] + $request->cantidadUpdate);
             $controlBodega->proveedor = $det['proveedor'];
             $controlBodega->update();
-            $this->log('Update','Se actualizo el stock en BOdega',$controlBodega->id,$request->user()->id);
-        }
+    }
 
     }
     //metodo que muestra todas las solicitudes que se encuentra
@@ -274,7 +273,7 @@ class SolicitudController extends Controller
                     ->where('solicituds.fecha_hora','<=',$fechaFin);
                 }
 
-            if($estado != 2){
+            if($estado != 3){
                     $solicitud->where('solicituds.status','=',$estado);
                 }
 
@@ -327,13 +326,39 @@ class SolicitudController extends Controller
 
         $detalleSolicitud = Solicitud::join('detalle_solicituds','detalle_solicituds.idSolicitud','=','solicituds.id')
             ->join('productos','detalle_solicituds.IdProducto','=','productos.id')
-            ->select('productos.nombre','detalle_solicituds.id as idDetalle','detalle_solicituds.cantidad','detalle_solicituds.comentario as comentario','detalle_solicituds.precio_unitario','productos.id as productoID')
+            ->select('productos.nombre','detalle_solicituds.id as idDetalle','detalle_solicituds.comenRechazo','detalle_solicituds.cantidad','detalle_solicituds.comentario as comentario','detalle_solicituds.precio_unitario','productos.id as productoID')
             ->where('solicituds.id','=',$id)
             ->get();
         return [
                  'detalleSolicitud' => $detalleSolicitud,
                  'solicitud' => $solicitud
                 ];
+    }
+    public function solicitudRechazada(Request $request){
+        if (!$request->ajax()) return redirect('/');
+       // \Log::debug($request);
+        try{
+            DB::beginTransaction();
+            $request->user()->authorizeRoles(['Administrador','Verificador']);
+            $solicitud = Solicitud::find($request->idSolicitud);
+            $solicitud->status = 2;
+            $solicitud->update();
+
+            $detSoli = $request->detalleSoli;
+            foreach($detSoli as $ep=>$det){
+                $detalleS =  DetalleSolicitud::find($det['idDetalle']);
+                $detalleS->comenRechazo = $det['comenRechazo'];
+                $detalleS->update();
+                $this->log('Update','Se rechazo detalle de solicitud', $detalleS->id, $request->user()->id);
+
+            }
+
+            DB::commit();
+        }catch(Exception $e){
+            DB::rollBack();
+            \Log::debug('Exception  ' . $e);
+
+        }
     }
     // metodo que realiza la solicitud lista cuando berenice ya haya atendido dicha solicitud
     public  function solicitudListo( Request $request){
@@ -360,7 +385,6 @@ class SolicitudController extends Controller
                 $resta = $controlBodega->total_stock -  $det['cantidad'];
                 $controlBodega->total_stock = $resta;
                 $controlBodega->save();
-            $this->log('Update','Se quito del stock en BOdega',$controlBodega->id,null);
             }
         }
 

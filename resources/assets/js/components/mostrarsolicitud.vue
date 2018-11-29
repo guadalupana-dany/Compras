@@ -22,7 +22,7 @@
                             </thead>
                             <tbody>
                                 <template v-for="(sol,index) in solicitud">
-                                    <template v-if="sol.status">
+                                    <template v-if="sol.status == 1">
                                             <tr >
                                                 <td v-text="index"></td>
                                                 <td>
@@ -119,7 +119,8 @@
                                                 <th>Producto</th>
                                                 <th>Cantidad</th>
                                                 <th>Precio U.</th>
-                                                <th>Comentario</th>
+                                                <th>Corr./Come.</th>
+                                                <th>Com. Rechazo</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -135,6 +136,7 @@
                                                     </template>
                                                        <td><input type="text" v-model="sol.precio_unitario" ></td>
                                                     <td v-text="sol.comentario"></td>
+                                                    <td> <input type="text" v-model="sol.comenRechazo" ></td>
                                                 </tr>
                                             </template>
                                             </tbody>
@@ -153,6 +155,7 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
                             <button type="button" class="btn btn-success" @click="despacharSoli()">CULMINAR SOLICITUD</button>
+                            <button type="button" class="btn btn-danger" @click="rechazarSoli()">RECHAZAR</button>
                         </div>
                     </div>
                     <!-- /.modal-content -->
@@ -184,6 +187,7 @@
 
                 arrayCamposVacios : [],
                 errorCampos : 0,
+
                 }
 
         },
@@ -304,7 +308,57 @@
             },
             //metodo que descarga en pdf el detalle de la solicitud
             descargarPdf(id){
-                window.open('http://10.60.81.12:81/sisPlanilla/public/solicitud/pdf/'+id,'_blank');
+                window.open('http://10.60.81.31/Compras/public/solicitud/pdf/'+id,'_blank');
+            },
+            rechazarSoli(){
+                    let me = this;
+                    me.$swal({
+                            title:'Rechazar Solicitud?',
+                            text: 'Esta segura de rechazar esta solicitud',
+                            type: 'error',
+                            showCancelButton: true,
+                            confirmButtonText: 'Si !',
+                            cancelButtonText: 'No, Cancelar!',
+                            showCloseButton: true,
+                            showLoaderOnConfirm: true
+                            }).then((result) => {
+                            if(result.value) {
+                                    me.errorCampos = 0;
+                                    me.arrayCamposVacios = [];
+
+
+                                    if(me.validarCamposRechazo()){
+                                      return;
+                                     }
+
+                                  setTimeout(function() {
+                                            let url = me.ruta + '/solicitud/solicitudRechazada';
+                                                axios.post(url,{
+                                                    'comRechazo' : me.comRechazo,
+                                                    'idSolicitud' : me.oneSolicitud.id_Soli,
+                                                    'detalleSoli' : me.detalleSolicitud
+                                                }).then(function(response){
+                                                    //console.log(response.data);
+                                                    me.$swal({
+                                                        type: 'error',
+                                                        title: 'SOLICITUD...',
+                                                        text: 'Tu solicitud a sido RECHAZADA!'
+                                                    })
+                                                    me.getDetalle();
+                                                    me.cerrarModal();
+                                                })
+                                                .catch(function (error){
+                                                    console.log(error);
+                                                    });
+
+
+                                    },800);
+
+                            } else {
+                                this.$swal('Cancelado', 'Cancelaste el Despacho', 'info')
+                            }
+                    })
+
             },
             //mtodo que valida el stock en bodega
             validaStock(idProducto,cantidad){
@@ -349,10 +403,10 @@
               //  return me.errorCampos;
 
             },
+
             //metodo que valida los campos
             validarCampos(){
                 let me = this;
-                me.errorStock = 0;
                 me.arrayErrorStock = [];
                 console.log("validarCampos");
                 for(var i = 0; i < me.detalleSolicitud.length; i++){
@@ -361,6 +415,19 @@
                     if(!me.detalleSolicitud[i].precio_unitario) me.arrayCamposVacios.push("ingrese precio en "+me.detalleSolicitud[i].nombre);
                     if(me.detalleSolicitud[i].precio_unitario < 1) me.arrayCamposVacios.push("El precio Mayor a 1 en "+me.detalleSolicitud[i].nombre);
 
+                }
+                if(me.arrayCamposVacios.length) me.errorCampos = 1;
+                return me.errorCampos;
+            },
+            validarCamposRechazo(){
+                let me = this;
+                me.arrayErrorStock = [];
+                let trae = false;
+                for(var i = 0; i < me.detalleSolicitud.length; i++){
+                     if(!me.detalleSolicitud[i].comenRechazo){
+                       me.arrayCamposVacios.push("Ingrese comentario al producto que esta rechazando ");
+
+                      }
                 }
                 if(me.arrayCamposVacios.length) me.errorCampos = 1;
                 return me.errorCampos;
@@ -392,7 +459,6 @@
 </script>
 <style>
     .modal-content{
-        width: 100% !important;
         position: absolute !important;
     }
     .mostrar{

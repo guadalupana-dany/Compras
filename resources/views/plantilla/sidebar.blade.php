@@ -22,12 +22,12 @@
                 @endif
                 @if(Auth::user()->hasRole('Administrador') or Auth::user()->hasRole('Departamento'))
                 <li @click="menu=3" class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-newspaper-o"></i>Solicitante</a>
+                    <a class="nav-link" href="#"><i class="fa fa-newspaper-o"></i>Requisición</a>
                 </li>
                 @endif
                 @if(Auth::user()->hasRole('Administrador') or Auth::user()->hasRole('Verificador'))
                 <li @click="menu=6" class="nav-item">
-                <a class="nav-link" href="#"><i class="fa fa-eye"></i>Solicitud Pendientes</a>
+                <a class="nav-link" href="#"><i class="fa fa-eye"></i>Requi Pendientes</a>
                 </li>
                 <li class="nav-item nav-dropdown">
                         <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-wallet"></i> Reportes</a>
@@ -40,10 +40,13 @@
                                 <a class="nav-link" href="#"><i class="fa  fa-file-text-o"></i>Reporte Conta</a>
                             </li>
                             <li @click="menu=13" class="nav-item">
-                                <a class="nav-link" href="#"><i class="fa  fa-file-text-o"></i>Solicitudes Realizadas</a>
+                                <a class="nav-link" href="#"><i class="fa  fa-file-text-o"></i>Requi. Realizadas</a>
+                            </li>
+                            <li @click="menu=14" class="nav-item">
+                                <a class="nav-link" href="#"><i class="fa  fa-file-text-o"></i>Requi. Rechazadas</a>
                             </li>
                             <li @click="menu=12" class="nav-item">
-                                    <a class="nav-link" href="#"><i class="fa  fa-file-text-o"></i>Detalle de Solicitudes</a>
+                                    <a class="nav-link" href="#"><i class="fa  fa-file-text-o"></i>Detalle de Requi.</a>
                             </li>
                         </ul>
                     </li>
