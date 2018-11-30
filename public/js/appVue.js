@@ -25722,7 +25722,8 @@ var app = new Vue({
     el: '#app',
     data: {
         menu: 0,
-        ruta: 'http://10.60.81.32:81/sisPlanilla/public'
+        // ruta : 'http://10.60.81.32:81/sisPlanilla/public'
+        ruta: 'http://10.60.81.31/Compras/public'
     }
 
 });
@@ -55376,7 +55377,8 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0__public_js_VueSweetalert2_js__["a" /* defaul
             me.ArrayDepartamento = [];
             var url = me.ruta + '/logout';
             axios.post(url).then(function (response) {
-                location.href = 'http://10.60.81.12:81/sisPlanilla/public/';
+                // location.href = 'http://10.60.81.12:81/sisPlanilla/public/';
+                location.href = 'http://10.60.81.31/Compras/public/';
             }).catch(function (error) {});
             // location.href = 'http://10.60.81.12:81/sisPlanilla/public/logout';
             //window.open('http://10.60.81.12:81/sisPlanilla/public/logout');
@@ -55565,7 +55567,7 @@ var render = function() {
                   _vm._v(" "),
                   _c("div", { staticClass: "col-md-3" }, [
                     _c("label", { attrs: { for: "inputEmail3" } }, [
-                      _vm._v("Comentario:")
+                      _vm._v("Correlativo/Comentario:")
                     ]),
                     _vm._v(" "),
                     _c("input", {
@@ -65542,6 +65544,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -65619,7 +65623,8 @@ var $ = jQuery;
             this.errorCampos = 0;
         },
         descargarPdf: function descargarPdf(id) {
-            window.open('http://10.60.81.12:81/sisPlanilla/public/solicitud/pdf/' + id, '_blank');
+            window.open('http://10.60.81.31/Compras/public/solicitud/pdf/' + id, '_blank');
+            //  window.open('http://10.60.81.12:81/sisPlanilla/public/solicitud/pdf/'+id,'_blank');
         }
     },
     mounted: function mounted() {
@@ -65994,6 +65999,12 @@ var render = function() {
                                       domProps: {
                                         textContent: _vm._s(sol.comentario)
                                       }
+                                    }),
+                                    _vm._v(" "),
+                                    _c("td", {
+                                      domProps: {
+                                        textContent: _vm._s(sol.comenRechazo)
+                                      }
                                     })
                                   ])
                                 ]
@@ -66147,7 +66158,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Precio U.")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Comentario")])
+        _c("th", [_vm._v("Comentario")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Come. Rechazo")])
       ])
     ])
   },
