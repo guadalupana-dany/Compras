@@ -25722,8 +25722,8 @@ var app = new Vue({
     el: '#app',
     data: {
         menu: 0,
-        // ruta : 'http://10.60.81.32:81/sisPlanilla/public'
-        ruta: 'http://10.60.81.31/Compras/public'
+        ruta: 'http://10.60.81.32:81/sisPlanilla/public'
+        //ruta : 'http://10.60.81.31/Compras/public'
     }
 
 });
@@ -60076,7 +60076,7 @@ var $ = jQuery;
                 resultado = resultado + parseFloat(this.productoBodega[i].total_saldo);
             }
 
-            return Math.round(parseFloat(resultado));
+            return resultado.toFixed(2);
         }
     },
     components: {
