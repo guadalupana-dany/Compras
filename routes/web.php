@@ -8,33 +8,14 @@ Auth::routes();
 
 Route::get('/main',function(){
     if(Auth::user()){
-        if(Auth::user()->estado){
+
+  if(Auth::user()->estado){
             return view('contenido.contenido');
         }else{
             //valida que el usuario que se loguea verifica si es un usuario activo si no lo desloguea
             Auth::logout();
             return redirect('/');
        }
-
-     /*
-        $fechaActual = new DateTime();
-        $fecha = date('Y-m-j');
-        $nuevafecha = strtotime ( '+5 day' , strtotime ( $fecha ) ) ;
-        $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
-        $solicitudes = \App\Solicitud::where('idUser','=',Auth::user()->id)
-                    ->select('created_at')->orderby('created_at','DESC')->take(1)->first();
-
-        if($solicitudes->created_at->format('Y-m') == $fechaActual->format('Y-m')){
-         return view('errorSolicitud');
-        }else{
-            if(($fechaActual->format('Y-m-d') <=  $nuevafecha) and (!Auth::user()->prioridad_pedido)){
-                    return view('pasadoDelMesSolicitud');
-            }else{
-                    return view('contenido.contenido');
-            }
-        }*/
-
-
     }
         return redirect('/');
 })->name('main');

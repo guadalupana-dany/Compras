@@ -21,29 +21,47 @@
                 </li>
                 @endif
 
+                <?php
+                $fechaActual = new DateTime();
+                $fecha = date('Y-m-j');
+                $nuevafecha = strtotime ( '+5 day' , strtotime ( $fecha ) ) ;
+                $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
+                $solicitudes = DB::table('solicituds')->where('idUser','=',Auth::user()->id)
+                            ->select('created_at')->orderby('created_at','DESC')->take(1)->first();
+
+                ?>
 
                 @if(Auth::user()->hasRole('Administrador') or Auth::user()->hasRole('Departamento'))
 
-                <li @click="menu=3" class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-newspaper-o"></i>Requisición</a>
+                        @if(!$solicitudes)
+                            <li @click="menu=3" class="nav-item">
+                                <a class="nav-link" href="#"><i class="fa fa-newspaper-o"></i>Requisición</a>
+                            </li>
+                        @else
+                                @if(\Carbon\Carbon::parse($solicitudes->created_at)->format('Y-m') == $fechaActual->format('Y-m'))
+                                    @if(Auth::user()->prioridad_pedido)
+                                        <li @click="menu=3" class="nav-item">
+                                            <a class="nav-link" href="#" ><i class="fa fa-newspaper-o"></i>Requisición</a>
+                                        </li>
+                                    @endif
+                                @else
+
+                                        @if((\Carbon\Carbon::parse($fechaActual)->format('Y-m-d') <=  $nuevafecha) and (!Auth::user()->prioridad_pedido))
+
+                                        @else
+                                            <li @click="menu=3" class="nav-item">
+                                                <a class="nav-link" href="#" ><i class="fa fa-newspaper-o"></i>Requisición</a>
+                                            </li>
+                                        @endif
+
+                                @endif
+                        @endif
+
+
+
+                <li @click="menu=15" class="nav-item">
+                    <a class="nav-link" href="#" disabled="disabled"><i class="fa fa-newspaper-o"></i>Mis Requi.</a>
                 </li>
-                {{
-                    $fechaActual = new DateTime();
-                    $solicitudes = \App\Solicitud::where('idUser','=',Auth::user()->id)
-                    ->select('created_at')->orderby('created_at','DESC')->take(1)->first();
-
-                 }}
-                 @if($solicitudes->created_at->format('Y-m') == $fechaActual->format('Y-m'))
-                    <li @click="menu=15" class="nav-item">
-                        <a class="nav-link" href="#" disabled="disabled"><i class="fa fa-newspaper-o"></i>Mis Requi.</a>
-                    </li>
-                 @else
-                    <li @click="menu=15" class="nav-item">
-                        <a class="nav-link" href="#" ><i class="fa fa-newspaper-o"></i>Mis Requi.</a>
-                    </li>
-                 @endif
-
-
                 @endif
 
 
