@@ -60,7 +60,7 @@
                                                 <input type="number" class="form-control" id="cantidadProducto"  placeholder="Ingrese Cant ..">
                                             </div>
                                             <div class="col-md-3">
-                                                <label for="inputEmail3" >Comentario:</label>
+                                                <label for="inputEmail3" >Correlativo/Comentario:</label>
                                                 <input type="text" class="form-control" v-model="comentarioDetalle"  placeholder="Ingrese comentario para este producto ..">
                                             </div>
                                         </div>
@@ -422,7 +422,8 @@
                 me.ArrayDepartamento = [];
                 let url = me.ruta + '/logout';
                 axios.post(url).then(function(response) {
-                        location.href = 'http://10.60.81.12:81/sisPlanilla/public/';
+                       // location.href = 'http://10.60.81.12:81/sisPlanilla/public/';
+                        location.href = 'http://10.60.81.31/Compras/public/';
                 }).catch(function(error){
 
                 });

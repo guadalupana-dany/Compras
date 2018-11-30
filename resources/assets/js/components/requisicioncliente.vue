@@ -122,6 +122,7 @@
                                                 <th>Cantidad</th>
                                                 <th>Precio U.</th>
                                                 <th>Comentario</th>
+                                                <th>Come. Rechazo</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -132,6 +133,7 @@
                                                     <td v-text="sol.cantidad"></td>
                                                     <td v-text="sol.precio_unitario"></td>
                                                     <td v-text="sol.comentario"></td>
+                                                    <td v-text="sol.comenRechazo"></td>
                                                 </tr>
                                             </template>
                                             </tbody>
@@ -237,7 +239,8 @@
                 this.errorCampos =0;
             },
             descargarPdf(id){
-                window.open('http://10.60.81.12:81/sisPlanilla/public/solicitud/pdf/'+id,'_blank');
+                window.open('http://10.60.81.31/Compras/public/solicitud/pdf/'+id,'_blank');
+              //  window.open('http://10.60.81.12:81/sisPlanilla/public/solicitud/pdf/'+id,'_blank');
             },
 
 
