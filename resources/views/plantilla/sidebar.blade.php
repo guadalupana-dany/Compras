@@ -27,7 +27,7 @@
                 $nuevafecha = strtotime ( '+5 day' , strtotime ( $fecha ) ) ;
                 $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
                 $solicitudes = DB::table('solicituds')->where('idUser','=',Auth::user()->id)
-                            ->select('created_at')->orderby('created_at','DESC')->take(1)->first();
+                            ->select('created_at','status')->orderby('created_at','DESC')->take(1)->first();
 
                 ?>
 
@@ -39,7 +39,7 @@
                             </li>
                         @else
                                 @if(\Carbon\Carbon::parse($solicitudes->created_at)->format('Y-m') == $fechaActual->format('Y-m'))
-                                    @if(Auth::user()->prioridad_pedido)
+                                    @if((Auth::user()->prioridad_pedido) || ($solicitudes->status == 2) )
                                         <li @click="menu=3" class="nav-item">
                                             <a class="nav-link" href="#" ><i class="fa fa-newspaper-o"></i>Requisición</a>
                                         </li>
