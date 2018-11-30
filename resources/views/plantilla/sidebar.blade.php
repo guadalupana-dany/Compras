@@ -20,18 +20,38 @@
                     </ul>
                 </li>
                 @endif
+
+
                 @if(Auth::user()->hasRole('Administrador') or Auth::user()->hasRole('Departamento'))
+
                 <li @click="menu=3" class="nav-item">
                     <a class="nav-link" href="#"><i class="fa fa-newspaper-o"></i>Requisición</a>
                 </li>
-                <li @click="menu=15" class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa fa-newspaper-o"></i>Mis Requi.</a>
-                </li>
+                {{
+                    $fechaActual = new DateTime();
+                    $solicitudes = \App\Solicitud::where('idUser','=',Auth::user()->id)
+                    ->select('created_at')->orderby('created_at','DESC')->take(1)->first();
+
+                 }}
+                 @if($solicitudes->created_at->format('Y-m') == $fechaActual->format('Y-m'))
+                    <li @click="menu=15" class="nav-item">
+                        <a class="nav-link" href="#" disabled="disabled"><i class="fa fa-newspaper-o"></i>Mis Requi.</a>
+                    </li>
+                 @else
+                    <li @click="menu=15" class="nav-item">
+                        <a class="nav-link" href="#" ><i class="fa fa-newspaper-o"></i>Mis Requi.</a>
+                    </li>
+                 @endif
+
+
                 @endif
+
+
                 @if(Auth::user()->hasRole('Administrador') or Auth::user()->hasRole('Verificador'))
                 <li @click="menu=6" class="nav-item">
                 <a class="nav-link" href="#"><i class="fa fa-eye"></i>Requi Pendientes</a>
                 </li>
+
                 <li class="nav-item nav-dropdown">
                         <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-wallet"></i> Reportes</a>
                         <ul class="nav-dropdown-items">
