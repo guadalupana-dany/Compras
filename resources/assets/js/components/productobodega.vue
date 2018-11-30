@@ -303,7 +303,7 @@
                         resultado = (resultado) + parseFloat(this.productoBodega[i].total_saldo);
                     }
 
-                    return resultado;
+                    return Math.round(resultado);
                 },
         },
         components: {
