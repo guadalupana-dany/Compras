@@ -90,7 +90,7 @@
                                     <td v-text="sol.departamento_nombre"></td>
                                     <td>
                                         <template v-if="sol.status == 1"><span class="badge badge-warning">Pendiente</span></template>
-                                        <template v-else-if="sol.status == 1"><span class="badge badge-info">Realizado</span></template>
+                                        <template v-else-if="sol.status == 0"><span class="badge badge-info">Realizado</span></template>
                                         <template v-else-if="sol.status == 2"><span class="badge badge-danger">Rechazado</span></template>
                                     </td>
                                 </tr>

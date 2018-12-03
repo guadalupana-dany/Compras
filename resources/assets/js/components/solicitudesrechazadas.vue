@@ -7,7 +7,7 @@
             <div class="container-fluid">
                 <div class="card">
                     <div class="card-header">
-                        <i class="fa fa-align-justify"></i>Solicitudes Recibidas
+                        <i class="fa fa-align-justify"></i>Solicitudes Rechazadas
                     </div>
                     <div class="card-body">
                        <table id="example" class="table table-striped table-bordered" style="width:100%">
@@ -89,12 +89,9 @@
                                         <div class="row">
                                             <div class="col-sm-4"><b>Estado de la Solicitud:</b></div>
                                             <div class="col-sm-6">
-                                                <template v-if="oneSolicitud.status">
-                                                    <span class="badge badge-warning">Pendiente</span>
-                                                </template>
-                                                <template v-else>
-                                                    <span class="badge badge-info">Realizado</span>
-                                                </template>
+
+                                                    <span class="badge badge-danger">Rechazado</span>
+
                                             </div>
                                         </div>
                                         <br>
@@ -239,7 +236,8 @@
                 this.errorCampos =0;
             },
             descargarPdf(id){
-                window.open('http://10.60.81.12:81/sisPlanilla/public/solicitud/pdf/'+id,'_blank');
+                window.open('http://10.60.81.31/Compras/public/solicitud/pdf/'+id,'_blank');
+                //window.open('http://10.60.81.12:81/sisPlanilla/public/solicitud/pdf/'+id,'_blank');
             },
 
 

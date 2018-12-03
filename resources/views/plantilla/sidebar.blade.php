@@ -46,7 +46,7 @@
                                     @endif
                                 @else
 
-                                        @if((\Carbon\Carbon::parse($fechaActual)->format('Y-m-d') <=  $nuevafecha) and (!Auth::user()->prioridad_pedido))
+                                        @if(($fechaActual->format('Y-m-d') <=  $nuevafecha) and (!Auth::user()->prioridad_pedido))
 
                                         @else
                                             <li @click="menu=3" class="nav-item">

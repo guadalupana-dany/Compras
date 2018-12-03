@@ -46,8 +46,9 @@
                                     <td v-text="sol.nombre_agencia"></td>
                                     <td v-text="sol.nombre_Depto"></td>
                                     <td>
-                                        <template v-if="sol.status"><span class="badge badge-warning">Pendiente</span></template>
-                                        <template v-else><span class="badge badge-info">Realizado</span></template>
+                                        <template v-if="sol.status == 1"><span class="badge badge-warning">Pendiente</span></template>
+                                        <template v-else-if="sol.status == 0"><span class="badge badge-info">Realizado</span></template>
+                                        <template v-else-if="sol.status == 2"><span class="badge badge-danger">Rechazado</span></template>
                                     </td>
                                 </tr>
                                 </template>
@@ -238,7 +239,8 @@
 
             },
             descargarPdf(id){
-                window.open('http://10.60.81.12:81/sisPlanilla/public/solicitud/pdf/'+id,'_blank');
+                window.open('http://10.60.81.31/Compras/public/solicitud/pdf/'+id,'_blank');
+                //window.open('http://10.60.81.12:81/sisPlanilla/public/solicitud/pdf/'+id,'_blank');
             }
         },
         mounted() {
