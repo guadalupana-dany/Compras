@@ -120,7 +120,7 @@
                                                 <th>Cantidad</th>
                                                 <th>Precio U.</th>
                                                 <th>Corr./Come.</th>
-                                                <th>Com. Rechazo</th>
+                                                <th>Com. Rechazo o Cant.</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -308,6 +308,7 @@
             },
             //metodo que descarga en pdf el detalle de la solicitud
             descargarPdf(id){
+               // window.open('http://10.60.81.31/Compras/public/solicitud/pdf/'+id,'_blank');
                 window.open('http://10.60.81.31/Compras/public/solicitud/pdf/'+id,'_blank');
             },
             rechazarSoli(){
@@ -464,7 +465,7 @@
     .mostrar{
         display: list-item !important;
         opacity: 1 !important;
-        position: absolute !important;
+        position: fixed !important;
         background-color: #3c29297a !important;
     }
     .div-error{

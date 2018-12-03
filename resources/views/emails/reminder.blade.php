@@ -66,9 +66,9 @@
 <div class="flex-center position-ref full-height">
 
         <div class="title m-b-md">
-            <h3>Hola Dany Díaz</h3>
+            <h3>Nueva Requisición</h3>
             <h3>Cooperativa Guadalupana</h3>
-            <h3>Solicitud No.{{ $numero_orden }}  fue creada</h3>
+            <h3>Requisicion No.{{ $numero_orden }}  fue creada</h3>
             <h3>Creada Por: {{ $users->name }}</h3>
             <h3>correo: {{ $users->email }}</h3>
 
