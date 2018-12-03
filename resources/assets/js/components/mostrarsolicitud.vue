@@ -327,7 +327,7 @@
                             if(result.value) {
                                     me.errorCampos = 0;
                                     me.arrayCamposVacios = [];
-
+                                    me.errorStock = 0;
 
                                     if(me.validarCamposRechazo()){
                                       return;
