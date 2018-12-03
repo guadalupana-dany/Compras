@@ -254,7 +254,8 @@
                             if(result.value) {
                                     me.errorCampos = 0;
                                     me.arrayCamposVacios = [];
-
+                                    me.arrayErrorStock;
+                                    me.errorStock = 0;
                                   if(me.validarCampos()){
                                        return;
                                    }
