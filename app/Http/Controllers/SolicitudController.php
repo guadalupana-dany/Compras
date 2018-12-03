@@ -405,6 +405,7 @@ class SolicitudController extends Controller
             $detalleS->cantidad = $det['cantidad'];
             $detalleS->precio_unitario = $det['precio_unitario'];
             $detalleS->precio_total = $det['cantidad'] * $det['precio_unitario'];
+            $detalleS->comenRechazo = $det['comenRechazo'];
             $detalleS->update();
             $this->log('Update','Se despacho detalle de solicitud', $detalleS->id, $request->user()->id);
             $controlBodega = ControlBodega::where('idProducto','=', $det['productoID'])->first();

@@ -258,15 +258,12 @@
                                   if(me.validarCampos()){
                                        return;
                                    }
-                                   console.log("1")
                                    for(var i = 0; i < me.detalleSolicitud.length; i++){
                                       me.validaStockEnviar(me.detalleSolicitud[i].nombre,me.detalleSolicitud[i].cantidad,me.detalleSolicitud[i].productoID);
                                    }
 
-                                   console.log("2");
-
                                   setTimeout(function() {
-                                        console.log("3")
+
                                             if(me.errorStock){
                                                 console.log("4")
                                                 return ;
