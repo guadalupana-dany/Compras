@@ -23,34 +23,52 @@
 
                 <?php
                 $fechaActual = new DateTime();
-                $fecha = date('Y-m-j');
-                $nuevafecha = strtotime ( '+5 day' , strtotime ( $fecha ) ) ;
-                $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
+                $fecha = \Carbon\Carbon::now()->startOfMonth();
+                $fechaLimite = strtotime ( '+9 day' , strtotime ( $fecha ) ) ;
+                $fechaLimite = date ( 'Y-m-d' , $fechaLimite );
                 $solicitudes = DB::table('solicituds')->where('idUser','=',Auth::user()->id)
                             ->select('created_at','status')->orderby('created_at','DESC')->take(1)->first();
+
+                $countador = DB::table('solicituds')->where('idUser','=',Auth::user()->id)
+                                                    ->where('created_at','like','%'. $fechaActual->format('Y-m') .'%')
+                                                    ->where('solicituds.status','!=','2')
+                                                    ->count();
+
 
                 ?>
 
                 @if(Auth::user()->hasRole('Administrador') or Auth::user()->hasRole('Departamento'))
 
-                        @if(!$solicitudes)
-                            <li @click="menu=3" class="nav-item">
-                                <a class="nav-link" href="#"><i class="fa fa-newspaper-o"></i>Requisición</a>
-                            </li>
+                        @if((!$solicitudes))
+                                @if($fechaLimite >= $fechaActual->format('Y-m-d'))
+                                    <li @click="menu=3" class="nav-item">
+                                        <a class="nav-link" href="#"><i class="fa fa-newspaper-o"></i>Requisición</a>
+                                    </li>
+                                @else
+
+                                @endif
+
                         @else
                                 @if(\Carbon\Carbon::parse($solicitudes->created_at)->format('Y-m') == $fechaActual->format('Y-m'))
                                     @if((Auth::user()->prioridad_pedido) || ($solicitudes->status == 2) )
                                         <li @click="menu=3" class="nav-item">
-                                            <a class="nav-link" href="#" ><i class="fa fa-newspaper-o"></i>Requisición</a>
+                                            <a class="nav-link" href="#" ><i class="fa fa-newspaper-o"></i>Requisición2</a>
                                         </li>
+                                    @else
+                                        @if($countador < 2)
+                                            <li @click="menu=3" class="nav-item">
+                                                <a class="nav-link" href="#" ><i class="fa fa-newspaper-o"></i>Requisición</a>
+                                            </li>
+                                        @endif
                                     @endif
+
                                 @else
 
-                                        @if(($fechaActual->format('Y-m-d') <=  $nuevafecha) and (!Auth::user()->prioridad_pedido))
+                                        @if( $fechaLimite >= $fechaActual->format('Y-m-d')) and (!Auth::user()->prioridad_pedido))
 
                                         @else
                                             <li @click="menu=3" class="nav-item">
-                                                <a class="nav-link" href="#" ><i class="fa fa-newspaper-o"></i>Requisición</a>
+                                                <a class="nav-link" href="#" ><i class="fa fa-newspaper-o"></i>Requisición4</a>
                                             </li>
                                         @endif
 
