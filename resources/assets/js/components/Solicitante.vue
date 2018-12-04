@@ -367,14 +367,16 @@
                                                     title: 'Enviado...',
                                                     text: 'Tu solicitud a sido enviada!'
                                                 })
+                                                me.limpiarCampos();
                                             }else{
                                                 me.$swal({
                                                     type: 'error',
                                                     title: 'Error...',
                                                     text: 'Ocurrio un error al enviar la solicitud!'
                                                 })
+                                                me.limpiarCampos();
                                             }
-                                            me.limpiarCampos();
+
 
                                     }).catch(function(error){
                                         console.log("Error en listAgencia");
@@ -408,6 +410,13 @@
             },
             limpiarCampos(){
                 var me = this;
+                let url = me.ruta + '/logout';
+                axios.post(url).then(function(response) {
+                       // location.href = 'http://10.60.81.32:81/sisPlanilla/public/';
+                        location.href = 'http://10.60.81.31/Compras/public/';
+                }).catch(function(error){
+
+                });
                 me.nombre = '';
                 me.idDepartamento = 0;
                 me.Idagencia = 0;
@@ -420,13 +429,7 @@
                 me.ArrayCategoria = [];
                 me.ArrayProducto = [];
                 me.ArrayDepartamento = [];
-                let url = me.ruta + '/logout';
-                axios.post(url).then(function(response) {
-                       // location.href = 'http://10.60.81.12:81/sisPlanilla/public/';
-                        location.href = 'http://10.60.81.31/Compras/public/';
-                }).catch(function(error){
 
-                });
                // location.href = 'http://10.60.81.12:81/sisPlanilla/public/logout';
                 //window.open('http://10.60.81.12:81/sisPlanilla/public/logout');
             }

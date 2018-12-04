@@ -29,7 +29,6 @@ class SolicitudController extends Controller
     public function guardar(Request $request)
     {
         if (!$request->ajax()) return redirect('/');
-        $request->user()->authorizeRoles(['Administrador','Departamento']);
 
 
         $retorno = 0;
@@ -202,25 +201,62 @@ class SolicitudController extends Controller
 
         return ['productoB' => $productoB];
     }
+    //metodo que guarda en la bitacora las compras
+    public function compraProductos(Request $request){
+        if (!$request->ajax()) return redirect('/');
+        $mytime = Carbon::now('America/Guatemala');
+
+        DB::table('bitacora_compras')->insert(
+            ['proveedor' => $request->proveedorC,
+             'producto' =>  $request->productoC,
+             'cantidad' => $request->cantidadC,
+             'total_pagar' => $request->totalPagoC,
+             'precio_unitario' => ($request->totalPagoC / $request->cantidadC),
+             'fecha_compra' => $mytime,
+             'idUser' => $request->user()->id
+             ]
+        );
+    }
+    public function getAllCompra(Request $request){
+        if (!$request->ajax()) return redirect('/');
+            $compras = DB::table('bitacora_compras')
+                            ->join('users','bitacora_compras.idUser','=','users.id')
+                            ->select('bitacora_compras.*','users.name')
+                            ->get();
+            return ['compras' => $compras];
+    }
     //actualizar el stock en bodega
     public function updateProductoBodega(Request $request){
-
+        if (!$request->ajax()) return redirect('/');
         $detalle = $request->data;
        //$det['cantidad'];
-        foreach($detalle as $ep=>$det){
-            $controlBodega = ControlBodega::find($det['idControl']);
-            $controlBodega->can_mes_anterior = $det['total_stock'];
-            $controlBodega->pre_u_mes_anterior = $det['total_unitario'];
-            $controlBodega->tot_mes_anterior = $det['total_saldo'];
-            $controlBodega->can_mes_actual = $request->cantidadUpdate;
-            $controlBodega->pre_u_mes_actual = $request->precioUnitario;
-            $controlBodega->tot_mes_actual = $request->total_pago;
-            $controlBodega->total_stock =  $det['total_stock'] + $request->cantidadUpdate;
-            $controlBodega->total_saldo =  $det['total_saldo'] + $request->total_pago;
-            $controlBodega->total_unitario = ($det['total_saldo'] + $request->total_pago)/( $det['total_stock'] + $request->cantidadUpdate);
-            $controlBodega->proveedor = $det['proveedor'];
-            $controlBodega->update();
-    }
+       $mytime = Carbon::now('America/Guatemala');
+            foreach($detalle as $ep=>$det){
+
+                $controlBodega = ControlBodega::find($det['idControl']);
+                $controlBodega->can_mes_anterior = $det['total_stock'];
+                $controlBodega->pre_u_mes_anterior = $det['total_unitario'];
+                $controlBodega->tot_mes_anterior = $det['total_saldo'];
+                $controlBodega->can_mes_actual = $request->cantidadUpdate;
+                $controlBodega->pre_u_mes_actual = $request->precioUnitario;
+                $controlBodega->tot_mes_actual = $request->total_pago;
+                $controlBodega->total_stock =  $det['total_stock'] + $request->cantidadUpdate;
+                $controlBodega->total_saldo =  $det['total_saldo'] + $request->total_pago;
+                $controlBodega->total_unitario = ($det['total_saldo'] + $request->total_pago)/( $det['total_stock'] + $request->cantidadUpdate);
+                $controlBodega->proveedor = $det['proveedor'];
+                $controlBodega->update();
+
+                DB::table('bitacora_compras')->insert(
+                    ['proveedor' => $det['proveedor'],
+                     'producto' =>  $det['nombre'],
+                     'cantidad' => $request->cantidadUpdate,
+                     'total_pagar' => $request->total_pago,
+                     'precio_unitario' => $request->precioUnitario,
+                     'fecha_compra' => $mytime,
+                     'idUser' => $request->user()->id
+                     ]
+                );
+        }
 
     }
         //metodo que muestra todas las solicitudes que se encuentra de cada cliente
@@ -232,7 +268,7 @@ class SolicitudController extends Controller
         $solicitud = Solicitud::join('agencia_departamento','solicituds.idAge_depto','=','agencia_departamento.id')
         ->join('agencias','agencia_departamento.agencia_id','=','agencias.id')
         ->join('departamentos','agencia_departamento.departamento_id','=','departamentos.id')
-        ->select('solicituds.id','solicituds.nombre_solcitante','solicituds.status','solicituds.total_gasto','solicituds.fecha_hora','solicituds.num_orden','agencias.nombre as nombre_agencia','departamentos.nombre as nombre_Depto')
+        ->select('solicituds.id','solicituds.nombre_solcitante','solicituds.status','solicituds.total_gasto','solicituds.fecha_hora','solicituds.fecha_fin','solicituds.num_orden','agencias.nombre as nombre_agencia','departamentos.nombre as nombre_Depto')
         ->where('solicituds.idUser','=',$request->user()->id)
         ->orderby('solicituds.fecha_hora','DESC')->get();
 
@@ -255,7 +291,7 @@ class SolicitudController extends Controller
         $solicitud = Solicitud::join('agencia_departamento','solicituds.idAge_depto','=','agencia_departamento.id')
         ->join('agencias','agencia_departamento.agencia_id','=','agencias.id')
         ->join('departamentos','agencia_departamento.departamento_id','=','departamentos.id')
-        ->select('solicituds.id','solicituds.nombre_solcitante','solicituds.status','solicituds.total_gasto','solicituds.fecha_hora','solicituds.num_orden','agencias.nombre as nombre_agencia','departamentos.nombre as nombre_Depto')->get();
+        ->select('solicituds.id','solicituds.nombre_solcitante','solicituds.status','solicituds.total_gasto','solicituds.fecha_hora','solicituds.fecha_fin','solicituds.num_orden','agencias.nombre as nombre_agencia','departamentos.nombre as nombre_Depto')->get();
 
 
         return ['solicitud' => $solicitud];
@@ -355,11 +391,16 @@ class SolicitudController extends Controller
     public function solicitudRechazada(Request $request){
         if (!$request->ajax()) return redirect('/');
        // \Log::debug($request);
+
+
         try{
+            $fecha_fin1 = Carbon::now('America/Guatemala');
+           // \Log::debug($fecha_fin1);
             DB::beginTransaction();
-           $request->user()->authorizeRoles(['Administrador','Verificador']);
+            $request->user()->authorizeRoles(['Administrador','Verificador']);
             $solicitud = Solicitud::find($request->idSolicitud);
             $solicitud->status = 2;
+            $solicitud->fecha_fin = $fecha_fin1;
             $solicitud->update();
 
             $detSoli = $request->detalleSoli;
@@ -390,13 +431,14 @@ class SolicitudController extends Controller
     // metodo que realiza la solicitud lista cuando berenice ya haya atendido dicha solicitud
     public  function solicitudListo( Request $request){
       if (!$request->ajax()) return redirect('/');
-
+      $mytime = Carbon::now('America/Guatemala');
       try{
         DB::beginTransaction();
         $request->user()->authorizeRoles(['Administrador','Verificador']);
         $solicitud = Solicitud::find($request->idSolicitud);
         $solicitud->status = 0;
         $solicitud->total_gasto = $request->total_gasto;
+        $solicitud->fecha_fin = $mytime;
         $solicitud->update();
 
         $detSoli = $request->detalleSoli;

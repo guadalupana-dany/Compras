@@ -68,11 +68,11 @@
         <div class="title m-b-md">
             <h3>{{ $user->name }}</h3>
             <h3>Cooperativa Guadalupana</h3>
-            <h3>Se le a creado un usuario a nuestra nueva pagina de compras</h3>
+            <h3>Se le a creado un usuario a nuestra nueva pagina de Compras</h3>
             <h3>Sus credenciales son las siguientes</h3>
             <h3>usuario : {{ $user->email }} </h3>
             <h3>contraseña : {{ $pass }}</h3>
-            <a href="http://10.60.81.31/Compras/public/"><h3>http://10.60.81.31/Compras/public/</h3></a>
+            <h3><a href="http://10.60.81.31/Compras/public/">Compras</a></h3>
         </div>
 
 </div>

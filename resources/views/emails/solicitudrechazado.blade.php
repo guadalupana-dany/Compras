@@ -69,7 +69,7 @@
             <h3>Hola {{ $users->name }}</h3>
             <h3>Cooperativa Guadalupana</h3>
             <h3>Tu Requisición No.{{ $numero_orden }}  fue Rechazada</h3>
-            <h3>Revisa Tu Requisición o contactarse al area de Ventas</h3>
+            <h3>Revisa Tu Requisición o contactarse al area de Compras</h3>
             <h4>berenice.garcia@micoopeguadalupana.com.gt</h4>
 
         </div>

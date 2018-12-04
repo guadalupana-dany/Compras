@@ -17,7 +17,8 @@
                                     <th>Opciones</th>
                                     <th>No. Orden</th>
                                     <th>Solicitante</th>
-                                    <th>Fecha</th>
+                                    <th>Fecha I</th>
+                                    <th>Fecha F</th>
                                     <th>Estado</th>
                                 </tr>
                             </thead>
@@ -38,6 +39,7 @@
                                                 <td v-text="sol.num_orden"></td>
                                                 <td v-text="sol.nombre_solcitante"></td>
                                                 <td v-text="sol.fecha_hora"></td>
+                                                 <td v-text="sol.fecha_fin"></td>
                                                 <td>
                                                     <template v-if="sol.status"><span class="badge badge-warning">Pendiente</span></template>
                                                     <template v-else><span class="badge badge-info">Realizado</span></template>
@@ -237,7 +239,8 @@
                 this.errorCampos =0;
             },
             descargarPdf(id){
-                window.open('http://10.60.81.12:81/sisPlanilla/public/solicitud/pdf/'+id,'_blank');
+              //  window.open('http://10.60.81.12:81/sisPlanilla/public/solicitud/pdf/'+id,'_blank');
+                window.open('http://10.60.81.31/Compras/public/solicitud/pdf/'+id,'_blank');
             },
 
 

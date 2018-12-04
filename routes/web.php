@@ -64,6 +64,9 @@ Route::get('/solicitud/getUser','SolicitudController@getUser');
 Route::get('/solicitud/exportExecel','SolicitudController@exportExecel');
 Route::post('/solicitud/solicitudRechazada','SolicitudController@solicitudRechazada');
 Route::get('/solicitud/getAllSolicitudCliente','SolicitudController@getAllSolicitudCliente');
+Route::post('/solicitud/compraProductos','SolicitudController@compraProductos');
+Route::get('/solicitud/getAllCompra','SolicitudController@getAllCompra');
+
 
 
 Route::get('/testing',function(){

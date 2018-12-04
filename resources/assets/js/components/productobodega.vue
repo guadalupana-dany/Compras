@@ -14,6 +14,9 @@
                         <button type="button" @click="abrirModalProducto()" class="btn btn-primary" >
                                     <i class="icon-plus"></i>&nbsp;Nuevo Producto
                         </button>
+                        <button type="button" @click="abrirModalCompra()" class="btn btn-primary" >
+                                    <i class="icon-plus"></i>&nbsp;Nuevo Compras Externa
+                        </button>
                     </div>
                     <div class="card-body">
                         <div style="color:red">
@@ -241,6 +244,64 @@
                 <!-- /.modal-dialog -->
             </div>
 
+            <div class="modal fade" tabindex="-1" :class="{'mostrar' : modalCompras}" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+                <div class="modal-dialog modal-primary modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">PRODUCTO</h4>
+                            <button type="button" class="close" @click="cerrarModal()" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="fa fa-align-justify"></i>Producto
+                                    </div>
+                                    <div v-show="errorProd" class="form-group">
+                                            <div class="text-center text-error">
+                                                <div v-for="error in errorPro" :key="error" v-text="error">
+
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class=row>
+                                            <div class="col-sm-2">Proveedor:</div>
+                                            <div class="col-md-4"> <input type="text" class="form-control" v-model="proveedorC"></div>
+                                        </div>
+                                        <br>
+                                        <div class=row>
+                                            <div class="col-sm-2">Producto:</div>
+                                            <div class="col-md-4"> <input type="text" class="form-control" v-model="productoC"></div>
+                                        </div>
+                                        <br>
+                                         <div class=row>
+                                            <div class="col-sm-2">cantidad:</div>
+                                            <div class="col-md-4"> <input type="number" class="form-control" v-model="cantidadC"></div>
+                                        </div>
+                                        <br>
+                                         <div class=row>
+                                            <div class="col-sm-2">Total A pagar:</div>
+                                            <div class="col-md-4"> <input type="text" class="form-control" v-model="totalPagoC"></div>
+                                        </div>
+                                        <br>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" @click="guardarCompra()">GUARDAR</button>
+                            <button type="button" class="btn btn-primary" @click="cerrarModal()">Cerrar</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+
 
         </main>
 </template>
@@ -284,6 +345,13 @@
                 modalCategoria : 0,
                 errorCate : [],
                 errorCateg : 0,
+
+                //para compras
+                modalCompras : 0,
+                proveedorC : '',
+                productoC : '',
+                cantidadC : 0,
+                totalPagoC :0,
 
                 //
                 ArrayCategoria : [],
@@ -376,6 +444,11 @@
                 this.errorCateg = 0;
                 this.IdCategoria = 0;
                 this.ArrayCategoria = [];
+                this.modalCompras = 0;
+                this.proveedorC = '',
+                this.productoC = '',
+                this.cantidadC = 0,
+                this.totalPagoC = 0
             },
             //metodo que actualiza el stock
             updateStock(){
@@ -419,6 +492,36 @@
                     })
 
 
+            },
+            abrirModalCompra(){
+              this.modalCompras = 1;
+            },
+            guardarCompra(){
+                console.log(" GUARDAR COMPRA  ")
+                /*this.modalCompras = 0;
+                this.proveedorC = '',
+                this.productoC = '',
+                this.cantidadC = 0,
+                this.totalPagoC = 0*/
+                let me = this;
+                let url = me.ruta + '/solicitud/compraProductos';
+                                    axios.post(url,{
+                                      'proveedorC'  : me.proveedorC,
+                                      'productoC' : me.productoC,
+                                      'cantidadC' : me.cantidadC,
+                                      'totalPagoC' : me.totalPagoC
+                                        }).then(function(response){
+                                           me.limipiarCampos();
+                                        })
+                                        .catch(function (error){
+                                                console.log(error);
+               });
+            },
+            limipiarCampos(){
+                this.proveedorC = '',
+                this.productoC = '',
+                this.cantidadC = 0,
+                this.totalPagoC = 0
             },
             abrirModalCategoria(){
                 this.modalCategoria = 1;

@@ -17,7 +17,8 @@
                                     <th>Opciones</th>
                                     <th>No. Orden</th>
                                     <th>Solicitante</th>
-                                    <th>Fecha</th>
+                                    <th>Fecha I</th>
+                                    <th>Fecha F</th>
                                     <th>Estado</th>
                                 </tr>
                             </thead>
@@ -38,6 +39,7 @@
                                                 <td v-text="sol.num_orden"></td>
                                                 <td v-text="sol.nombre_solcitante"></td>
                                                 <td v-text="sol.fecha_hora"></td>
+                                                <td v-text="sol.fecha_fin"></td>
                                                 <td>
                                                     <template v-if="sol.status == 1"><span class="badge badge-warning">Pendiente</span></template>
                                                     <template v-else-if="sol.status == 0"><span class="badge badge-info">Realizado</span></template>

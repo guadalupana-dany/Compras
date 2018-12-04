@@ -1,6 +1,3 @@
-
-
-
 require('./bootstrap');
 window.Vue = require('vue');
 
@@ -18,15 +15,16 @@ Vue.component('detallesolicitud', require('./components/detallesolicitud.vue'));
 Vue.component('solicitudesall', require('./components/solicitudesAll.vue'));
 Vue.component('solicitudesrechazadas', require('./components/solicitudesrechazadas.vue'));
 Vue.component('requisicioncliente', require('./components/requisicioncliente.vue'));
+Vue.component('hitorialbitacora', require('./components/hitorialbitacora.vue'));
 
 //requisicioncliente
 
 const app = new Vue({
     el: '#app',
-    data :{
-        menu : 0,
-       //ruta : 'http://10.60.81.32:81/sisPlanilla/public'
-        ruta : 'http://10.60.81.31/Compras/public'
+    data: {
+        menu: 0,
+        //ruta: 'http://10.60.81.32:81/sisPlanilla/public'
+        ruta: 'http://10.60.81.31/Compras/public'
     }
 
 });

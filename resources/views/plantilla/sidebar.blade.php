@@ -89,6 +89,9 @@
                             <li @click="menu=12" class="nav-item">
                                     <a class="nav-link" href="#"><i class="fa  fa-file-text-o"></i>Detalle de Requi.</a>
                             </li>
+                            <li @click="menu=16" class="nav-item">
+                                <a class="nav-link" href="#"><i class="fa  fa-file-text-o"></i>Histo. Compras.</a>
+                            </li>
                         </ul>
                     </li>
                 @endif

@@ -56,5 +56,9 @@
 <template v-if="menu==15">
     <requisicioncliente :ruta="ruta"></requisicioncliente>
 </template>
+<template v-if="menu==16">
+    <hitorialbitacora :ruta="ruta"></hitorialbitacora>
+</template>
+
 
 @endsection
