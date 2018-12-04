@@ -52,7 +52,7 @@
                                 @if(\Carbon\Carbon::parse($solicitudes->created_at)->format('Y-m') == $fechaActual->format('Y-m'))
                                     @if((Auth::user()->prioridad_pedido) || ($solicitudes->status == 2) )
                                         <li @click="menu=3" class="nav-item">
-                                            <a class="nav-link" href="#" ><i class="fa fa-newspaper-o"></i>Requisición2</a>
+                                            <a class="nav-link" href="#" ><i class="fa fa-newspaper-o"></i>Requisición</a>
                                         </li>
                                     @else
                                         @if($countador < 2)
@@ -68,7 +68,7 @@
 
                                         @else
                                             <li @click="menu=3" class="nav-item">
-                                                <a class="nav-link" href="#" ><i class="fa fa-newspaper-o"></i>Requisición4</a>
+                                                <a class="nav-link" href="#" ><i class="fa fa-newspaper-o"></i>Requisición</a>
                                             </li>
                                         @endif
 
