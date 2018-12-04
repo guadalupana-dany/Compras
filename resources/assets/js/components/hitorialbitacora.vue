@@ -15,7 +15,7 @@
                                 <tr>
                                     <th>Proveedor</th>
                                     <th>Producto</th>
-                                    <th>Cantidadn</th>
+                                    <th>Cantidad</th>
                                     <th>Total_Pagado</th>
                                     <th>P/u</th>
                                     <th>Fecha Compra</th>
