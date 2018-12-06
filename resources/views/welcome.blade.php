@@ -77,7 +77,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    MiCoope Guadalupana
+                    <img style="width:75%" src="img/micoope1.png" alt="">
                 </div>
             </div>
         </div>

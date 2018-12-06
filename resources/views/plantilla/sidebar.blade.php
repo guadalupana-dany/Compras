@@ -24,7 +24,7 @@
                 <?php
                 $fechaActual = new DateTime();
                 $fecha = \Carbon\Carbon::now()->startOfMonth();
-                $fechaLimite = strtotime ( '+9 day' , strtotime ( $fecha ) ) ;
+                $fechaLimite = strtotime ( '+16 day' , strtotime ( $fecha ) ) ;
                 $fechaLimite = date ( 'Y-m-d' , $fechaLimite );
                 $solicitudes = DB::table('solicituds')->where('idUser','=',Auth::user()->id)
                             ->select('created_at','status')->orderby('created_at','DESC')->take(1)->first();
