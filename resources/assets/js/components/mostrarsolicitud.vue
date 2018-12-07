@@ -51,7 +51,7 @@
 
             </div>
 
-            <div class="modal fade" tabindex="-1" :class="{'mostrar' : modal}" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+            <div class="modal fade" tabindex="-1" :class="{'mostrar' : modal}" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true" width="50%">
                 <div class="modal-dialog modal-primary modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -97,6 +97,14 @@
                                             </div>
                                         </div>
                                         <br>
+                                        <br>
+                                        <div class="row">
+                                            <div class="col-sm-4"><b>Fecha estimado de entrega:</b></div>
+                                            <div class="col-sm-4">
+                                                <input type="date" v-model="fecha_estimado" class="form-control">
+                                            </div>
+                                        </div>
+
                                         <div v-show="errorStock" class="form-group">
                                             <div class="text-center text-error">
                                                 <div v-for="error in arrayErrorStock" :key="error" v-text="error">
@@ -112,35 +120,39 @@
                                             </div>
                                         </div>
                                         <br>
-                                        <table class="table table-striped table-bordered" style="width:100%">
-                                            <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Producto</th>
-                                                <th>Cantidad</th>
-                                                <th>Precio U.</th>
-                                                <th>Corr./Come.</th>
-                                                <th>Com. Rechazo o Cant.</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <template v-for="(sol,index) in detalleSolicitud">
-                                                <tr >
-                                                    <td v-text="index"></td>
-                                                    <td v-text="sol.nombre"></td>
-                                                    <template v-if="oneSolicitud.status">
-                                                        <td><input type="number" v-model="sol.cantidad"  @change="validaStock(sol.productoID,sol.cantidad)"></td>
-                                                    </template>
-                                                    <template v-else>
-                                                        <td v-text="sol.cantidad" @change="validaStock(sol.productoID,sol.cantidad)"></td>
-                                                    </template>
-                                                       <td><input type="text" v-model="sol.precio_unitario" ></td>
-                                                    <td v-text="sol.comentario"></td>
-                                                    <td> <input type="text" v-model="sol.comenRechazo" ></td>
-                                                </tr>
-                                            </template>
-                                            </tbody>
-                                        </table>
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                    <div class="table-responsive">
+                                                    <table class="table table-bordered" >
+                                                        <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Producto</th>
+                                                            <th>Cantidad</th>
+                                                            <th>Precio U.</th>
+                                                            <th>Corr./Come.</th>
+                                                            <th>Com. Rechazo o Cant.</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr v-for="(sol,index) in detalleSolicitud" :key="sol.id">
+                                                                <td v-text="index"></td>
+                                                                <td v-text="sol.nombre"></td>
+                                                                <template v-if="oneSolicitud.status">
+                                                                    <td><input type="number" v-model="sol.cantidad"  @change="validaStock(sol.productoID,sol.cantidad)"></td>
+                                                                </template>
+                                                                <template v-else>
+                                                                    <td v-text="sol.cantidad" @change="validaStock(sol.productoID,sol.cantidad)"></td>
+                                                                </template>
+                                                                <td><input type="text" v-model="sol.precio_unitario" ></td>
+                                                                <td v-text="sol.comentario"></td>
+                                                                <td> <input type="text" v-model="sol.comenRechazo" ></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    </div>
+                                            </div>
+                                        </div>
                                         <br>
                                          <div class="row">
                                             <div class="col-sm-4"><b>Total:</b></div>
@@ -184,7 +196,7 @@
                 total : 0,
                 arrayErrorStock : [], //este array es el que va contener los productos que no tienen la cantidad que es en el stock
                 errorStock : 0, //variable que ve si hay errores de stock
-
+                fecha_estimado : '',
                 arrayCamposVacios : [],
                 errorCampos : 0,
 
@@ -225,17 +237,24 @@
             },
             //metodo que nos muestra solo la solicitud seleccionada
             verSolicitud(id){
+                console.log("111")
                 let me = this;
-                me.modal = 1;
+
                 let url = me.ruta + '/solicitud/getSolicitud/'+id;
                 axios.get(url).then(function(response){
                         //console.log(response.data);
                         me.detalleSolicitud = response.data.detalleSolicitud;
                         me.oneSolicitud = response.data.solicitud;
+
                     })
                     .catch(function (error){
                         console.log(error);
-                    });
+                });
+
+                setTimeout(function() {
+
+ me.modal = 1
+                  },800) ;
 
             },
             //metodo que despcha o finalizsa una solicitud
@@ -274,7 +293,8 @@
                                                 axios.post(url,{
                                                     'total_gasto' : me.total,
                                                     'idSolicitud' : me.oneSolicitud.id_Soli,
-                                                    'detalleSoli' : me.detalleSolicitud
+                                                    'detalleSoli' : me.detalleSolicitud,
+                                                    'fecha_estimado' : me.fecha_estimado
                                                 }).then(function(response){
                                                     //console.log(response.data);
                                                     me.$swal({
@@ -307,6 +327,7 @@
                 this.errorStock = 0;
                 this.arrayErrorStock = [];
                 this.errorCampos =0;
+                this.fecha_estimado = '';
             },
             //metodo que descarga en pdf el detalle de la solicitud
             descargarPdf(id){

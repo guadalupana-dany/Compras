@@ -101,8 +101,8 @@ class SolicitudController extends Controller
             //AQUIEN MANDA EL CORREO
             $m->from('alerta@micoopeguadalupana.com.gt','MicoopeGuadalupana');
             //AQUIEN LE LLEGA EL CORREO
-         //   $m->to('dany.diaz@micoopeguadalupana.com.gt','Dany Diaz')->cc('danylen1@hotmail.com','Copia Dany')->subject('Nueva Requisición');
-            $m->to('berenice.garcia@micoopeguadalupana.com.gt','Berenice Garcia')->cc('juliana.feliciano@micoopeguadalupana.com.gt','Juliana Feliciano')->subject('Nueva Requisición');
+           $m->to('dany.diaz@micoopeguadalupana.com.gt','Dany Diaz')->cc('danylen1@hotmail.com','Copia Dany')->subject('Nueva Requisición');
+          //  $m->to('berenice.garcia@micoopeguadalupana.com.gt','Berenice Garcia')->cc('juliana.feliciano@micoopeguadalupana.com.gt','Juliana Feliciano')->subject('Nueva Requisición');
 
         });
     }
@@ -268,7 +268,7 @@ class SolicitudController extends Controller
         $solicitud = Solicitud::join('agencia_departamento','solicituds.idAge_depto','=','agencia_departamento.id')
         ->join('agencias','agencia_departamento.agencia_id','=','agencias.id')
         ->join('departamentos','agencia_departamento.departamento_id','=','departamentos.id')
-        ->select('solicituds.id','solicituds.nombre_solcitante','solicituds.status','solicituds.total_gasto','solicituds.fecha_hora','solicituds.fecha_fin','solicituds.num_orden','agencias.nombre as nombre_agencia','departamentos.nombre as nombre_Depto')
+        ->select('solicituds.id','solicituds.nombre_solcitante','solicituds.status','solicituds.total_gasto','solicituds.fecha_hora','solicituds.fecha_fin','solicituds.fecha_estimado','solicituds.num_orden','agencias.nombre as nombre_agencia','departamentos.nombre as nombre_Depto')
         ->where('solicituds.idUser','=',$request->user()->id)
         ->orderby('solicituds.fecha_hora','DESC')->get();
 
@@ -291,7 +291,7 @@ class SolicitudController extends Controller
         $solicitud = Solicitud::join('agencia_departamento','solicituds.idAge_depto','=','agencia_departamento.id')
         ->join('agencias','agencia_departamento.agencia_id','=','agencias.id')
         ->join('departamentos','agencia_departamento.departamento_id','=','departamentos.id')
-        ->select('solicituds.id','solicituds.nombre_solcitante','solicituds.status','solicituds.total_gasto','solicituds.fecha_hora','solicituds.fecha_fin','solicituds.num_orden','agencias.nombre as nombre_agencia','departamentos.nombre as nombre_Depto')->get();
+        ->select('solicituds.id','solicituds.nombre_solcitante','solicituds.status','solicituds.total_gasto','solicituds.fecha_hora','solicituds.fecha_fin','solicituds.fecha_estimado','solicituds.num_orden','agencias.nombre as nombre_agencia','departamentos.nombre as nombre_Depto')->get();
 
 
         return ['solicitud' => $solicitud];
@@ -439,6 +439,7 @@ class SolicitudController extends Controller
         $solicitud->status = 0;
         $solicitud->total_gasto = $request->total_gasto;
         $solicitud->fecha_fin = $mytime;
+        $solicitud->fecha_estimado = $request->fecha_estimado;
         $solicitud->update();
 
         $detSoli = $request->detalleSoli;
