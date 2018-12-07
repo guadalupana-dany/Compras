@@ -101,8 +101,8 @@ class SolicitudController extends Controller
             //AQUIEN MANDA EL CORREO
             $m->from('alerta@micoopeguadalupana.com.gt','MicoopeGuadalupana');
             //AQUIEN LE LLEGA EL CORREO
-           $m->to('dany.diaz@micoopeguadalupana.com.gt','Dany Diaz')->cc('danylen1@hotmail.com','Copia Dany')->subject('Nueva Requisición');
-          //  $m->to('berenice.garcia@micoopeguadalupana.com.gt','Berenice Garcia')->cc('juliana.feliciano@micoopeguadalupana.com.gt','Juliana Feliciano')->subject('Nueva Requisición');
+          // $m->to('dany.diaz@micoopeguadalupana.com.gt','Dany Diaz')->cc('danylen1@hotmail.com','Copia Dany')->subject('Nueva Requisición');
+            $m->to('berenice.garcia@micoopeguadalupana.com.gt','Berenice Garcia')->cc('juliana.feliciano@micoopeguadalupana.com.gt','Juliana Feliciano')->subject('Nueva Requisición');
 
         });
     }
