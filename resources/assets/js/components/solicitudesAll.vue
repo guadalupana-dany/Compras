@@ -29,7 +29,7 @@
                                             <tr >
                                                 <td v-text="index"></td>
                                                 <td>
-                                                    <button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" title="ver detalle de la solicitud" @click="verSolicitud(sol.id)" >
+                                                    <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#myModal" title="ver detalle de la solicitud" @click="verSolicitud(sol.id)" >
                                                         <i class="fa fa-eye"></i>
                                                     </button>
 
@@ -57,12 +57,12 @@
 
             </div>
 
-            <div class="modal fade" tabindex="-1" :class="{'mostrar' : modal}" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
-                <div class="modal-dialog modal-primary modal-lg" role="document">
+            <div class="modal fade" id ="myModal">
+               <div class="modal-dialog modal-primary modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title">Detalle de Solicitud</h4>
-                            <button type="button" class="close" @click="cerrarModal()" aria-label="Close">
+                            <button type="button" class="close" data-dismiss="modal" @click="cerrarModal()" aria-label="Close">
                                 <span aria-hidden="true">×</span>
                             </button>
                         </div>
@@ -152,7 +152,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="cerrarModal()">Cerrar</button>
                         </div>
                     </div>
                     <!-- /.modal-content -->
@@ -233,6 +233,7 @@
 
             },
             cerrarModal(){
+                jQuery("#myModal").modal("hide");
                 this.modal = 0;
                 this.detalleSolicitud = [];
                 this.oneSolicitud = [];
