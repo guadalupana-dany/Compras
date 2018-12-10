@@ -1,14 +1,14 @@
 <div class="sidebar">
         <nav class="sidebar-nav">
             <ul class="nav">
-                <li @click="menu=0" class="nav-item">
+               <!-- <li @click="menu=0" class="nav-item">
                     <a class="nav-link active" href="#"><i class="icon-speedometer"></i> Escritorio</a>
                 </li>
                 <li class="nav-title">
                     Mantenimiento
                 </li>
                 @if(Auth::user()->hasRole('Administrador'))
-                <li class="nav-item nav-dropdown">
+            <li class="nav-item nav-dropdown">
                     <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-wallet"></i> Compras</a>
                     <ul class="nav-dropdown-items">
                         <li @click="menu=1" class="nav-item">
@@ -19,7 +19,7 @@
                         </li>
                     </ul>
                 </li>
-                @endif
+                @endif-->
 
                 <?php
                 $fechaActual = new DateTime();
@@ -64,7 +64,7 @@
 
                                 @else
 
-                                        @if( $fechaLimite >= $fechaActual->format('Y-m-d')) and (!Auth::user()->prioridad_pedido))
+                                        @if(($fechaLimite >= $fechaActual->format('Y-m-d')) and (!Auth::user()->prioridad_pedido))
 
                                         @else
                                             <li @click="menu=3" class="nav-item">

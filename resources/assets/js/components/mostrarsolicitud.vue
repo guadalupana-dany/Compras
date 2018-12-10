@@ -26,10 +26,9 @@
                                             <tr >
                                                 <td v-text="index"></td>
                                                 <td>
-                                                    <button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" title="ver detalle de la solicitud" @click="verSolicitud(sol.id)" >
+                                                    <button type="button"  class="btn btn-warning btn-sm" data-toggle="modal" title="ver detalle de la solicitud" data-target="#myModal" @click="verSolicitud(sol.id)" >
                                                         <i class="fa fa-eye"></i>
                                                     </button>
-
                                                     <button type="button" class="btn btn-danger btn-sm"  data-toggle="tooltip" title="Exportar Pdf" @click="descargarPdf(sol.id)">
                                                        <i class="fa fa-file-pdf-o"></i>
                                                     </button>
@@ -51,14 +50,17 @@
 
             </div>
 
-            <div class="modal fade" tabindex="-1" :class="{'mostrar' : modal}" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true" width="50%">
-                <div class="modal-dialog modal-primary modal-lg" role="document">
+            <div class="modal fade" id ="myModal">
+                <div class="modal-dialog modal-primary modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title">Detalle de Solicitud</h4>
-                            <button type="button" class="close" @click="cerrarModal()" aria-label="Close">
+                           <!-- <button type="button" class="close" @click="cerrarModal()" aria-label="Close">
                                 <span aria-hidden="true">×</span>
-                            </button>
+                            </button> -->
+                             <button type="button" class="close" id="cerrarModal" data-dismiss="modal"  @click="cerrarModal()" aria-label="Close">
+                               <span aria-hidden="true">×</span>
+                             </button>
                         </div>
                         <div class="modal-body">
                             <div class="container-fluid">
@@ -165,7 +167,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
+                            <button type="button" class="btn btn-secondary"  id="cerrarModal" data-dismiss="modal"  @click="cerrarModal()">Cerrar</button>
                             <button type="button" class="btn btn-success" @click="despacharSoli()">CULMINAR SOLICITUD</button>
                             <button type="button" class="btn btn-danger" @click="rechazarSoli()">RECHAZAR</button>
                         </div>
@@ -174,6 +176,9 @@
                 </div>
                 <!-- /.modal-dialog -->
             </div>
+
+           
+
         </main>
 </template>
 
@@ -182,6 +187,7 @@
     import VueLoading from 'vue-loading-overlay';
     import 'vue-loading-overlay/dist/vue-loading.min.css';
     import swalPlugin from '../../../../public/js/VueSweetalert2.js';
+
     Vue.use(swalPlugin);
     Vue.use(VueLoading);
     let $ = jQuery;
@@ -190,7 +196,7 @@
         data(){
             return{
                 solicitud : [],
-                modal : 0,
+                modal1 : 0,
                 detalleSolicitud : [],
                 oneSolicitud : [],
                 total : 0,
@@ -237,24 +243,20 @@
             },
             //metodo que nos muestra solo la solicitud seleccionada
             verSolicitud(id){
-                console.log("111")
                 let me = this;
-
                 let url = me.ruta + '/solicitud/getSolicitud/'+id;
+               
                 axios.get(url).then(function(response){
                         //console.log(response.data);
+                        
                         me.detalleSolicitud = response.data.detalleSolicitud;
                         me.oneSolicitud = response.data.solicitud;
-
-                    })
+                        me.modal1 = 1;
+                      
+                    })                   
                     .catch(function (error){
                         console.log(error);
                 });
-
-                setTimeout(function() {
-
- me.modal = 1
-                  },800) ;
 
             },
             //metodo que despcha o finalizsa una solicitud
@@ -321,7 +323,8 @@
 
             },
             cerrarModal(){
-                this.modal = 0;
+                this.modal1 = 0;
+                jQuery("#myModal").modal("hide");
                 this.detalleSolicitud = [];
                 this.oneSolicitud = [];
                 this.errorStock = 0;
@@ -336,7 +339,8 @@
             },
             rechazarSoli(){
                     let me = this;
-                    me.$swal({
+                    
+                   me.$swal({
                             title:'Rechazar Solicitud?',
                             text: 'Esta segura de rechazar esta solicitud',
                             type: 'error',
@@ -432,7 +436,6 @@
             validarCampos(){
                 let me = this;
                 me.arrayErrorStock = [];
-                console.log("validarCampos");
                 for(var i = 0; i < me.detalleSolicitud.length; i++){
                     if(!me.detalleSolicitud[i].cantidad) me.arrayCamposVacios.push("ingrese cantidad en "+me.detalleSolicitud[i].nombre);
                     if(me.detalleSolicitud[i].cantidad < 1) me.arrayCamposVacios.push("La cantidad Mayor a 1 en "+me.detalleSolicitud[i].nombre);
@@ -465,6 +468,8 @@
            // alert("mounted");
             this.open();
             this.getDetalle();
+        //jQuery("#modal-default").modal();
+
             setTimeout(function() {
                 var table = $('#example').DataTable( {
                     buttons: [ 'excel', 'pdf' ]
@@ -484,12 +489,6 @@
 <style>
     .modal-content{
         position: absolute !important;
-    }
-    .mostrar{
-        display: list-item !important;
-        opacity: 1 !important;
-        position: fixed !important;
-        background-color: #3c29297a !important;
     }
     .div-error{
         display: flex;
