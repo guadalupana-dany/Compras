@@ -19,7 +19,7 @@
                                     <th>Solicitante</th>
                                     <th>F. Creacion</th>
                                     <th>F. Acepatacion</th>
-                                    <th>F. Entraga</th>
+                                    <th>F. Entrega</th>
                                     <th>Estado</th>
                                 </tr>
                             </thead>
