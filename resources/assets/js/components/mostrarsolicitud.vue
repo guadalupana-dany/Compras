@@ -177,7 +177,7 @@
                 <!-- /.modal-dialog -->
             </div>
 
-           
+
 
         </main>
 </template>
@@ -245,15 +245,15 @@
             verSolicitud(id){
                 let me = this;
                 let url = me.ruta + '/solicitud/getSolicitud/'+id;
-               
+
                 axios.get(url).then(function(response){
                         //console.log(response.data);
-                        
+
                         me.detalleSolicitud = response.data.detalleSolicitud;
                         me.oneSolicitud = response.data.solicitud;
                         me.modal1 = 1;
-                      
-                    })                   
+
+                    })
                     .catch(function (error){
                         console.log(error);
                 });
@@ -287,10 +287,8 @@
                                   setTimeout(function() {
 
                                             if(me.errorStock){
-                                                console.log("4")
                                                 return ;
                                             }else{
-                                                console.log("5")
                                                  let url = me.ruta + '/solicitud/solicitudListo';
                                                 axios.post(url,{
                                                     'total_gasto' : me.total,
@@ -339,7 +337,7 @@
             },
             rechazarSoli(){
                     let me = this;
-                    
+
                    me.$swal({
                             title:'Rechazar Solicitud?',
                             text: 'Esta segura de rechazar esta solicitud',
@@ -440,7 +438,7 @@
                     if(!me.detalleSolicitud[i].cantidad) me.arrayCamposVacios.push("ingrese cantidad en "+me.detalleSolicitud[i].nombre);
                     if(me.detalleSolicitud[i].cantidad < 1) me.arrayCamposVacios.push("La cantidad Mayor a 1 en "+me.detalleSolicitud[i].nombre);
                     if(!me.detalleSolicitud[i].precio_unitario) me.arrayCamposVacios.push("ingrese precio en "+me.detalleSolicitud[i].nombre);
-                    if(me.detalleSolicitud[i].precio_unitario < 1) me.arrayCamposVacios.push("El precio Mayor a 1 en "+me.detalleSolicitud[i].nombre);
+                    if(me.detalleSolicitud[i].precio_unitario < 0) me.arrayCamposVacios.push("El precio Mayor a 1 en "+me.detalleSolicitud[i].nombre);
 
                 }
                 if(me.arrayCamposVacios.length) me.errorCampos = 1;
