@@ -101,7 +101,7 @@ class SolicitudController extends Controller
             //AQUIEN MANDA EL CORREO
             $m->from('alerta@micoopeguadalupana.com.gt','MicoopeGuadalupana');
             //AQUIEN LE LLEGA EL CORREO
-          // $m->to('dany.diaz@micoopeguadalupana.com.gt','Dany Diaz')->cc('danylen1@hotmail.com','Copia Dany')->subject('Nueva Requisición');
+         //  $m->to('dany.diaz@micoopeguadalupana.com.gt','Dany Diaz')->subject('Nueva Requisición');
             $m->to('berenice.garcia@micoopeguadalupana.com.gt','Berenice Garcia')->cc('juliana.feliciano@micoopeguadalupana.com.gt','Juliana Feliciano')->subject('Nueva Requisición');
 
         });
@@ -486,6 +486,16 @@ class SolicitudController extends Controller
 
         $pdf = \PDF::loadView('pdf.detalle',['detalleSolicitud' => $detalleSolicitud,'solicitud' => $solicitud]);
         return $pdf->download('detalle.pdf');
+    }
+
+    public function descargarStockPdf(){
+
+        $productoB =  ControlBodega::join('productos','control_bodega_.idProducto','=','productos.id')
+        ->select('productos.nombre','control_bodega_.total_stock')
+        ->where('control_bodega_.total_stock','<','20')->get();
+
+        $pdf = \PDF::loadView('pdf.controlStock',['productos' => $productoB]);
+        return $pdf->download('stock.pdf');
     }
     //metodo que guarda las acciones del usuario
     private function log($tipo,$descripcion,$idObjeto,$idUser){

@@ -17,6 +17,9 @@
                         <button type="button" @click="abrirModalCompra()" class="btn btn-primary" >
                                     <i class="icon-plus"></i>&nbsp;Nuevo Compras Externa
                         </button>
+                         <button type="button" @click="descargarStockPdf()" class="btn btn-danger" >
+                                   <i class="fa fa-file-pdf-o"></i>&nbsp;Stock
+                        </button>
                     </div>
                     <div class="card-body">
                         <div style="color:red">
@@ -618,6 +621,10 @@
                 }else{
                     me.ArrayCategoria = [];
                 }
+            },
+            descargarStockPdf(){
+              //  window.open('http://10.60.81.32:81/sisPlanilla/public/solicitud/descargarStockPdf','_blank');
+                window.open('http://10.60.81.31/Compras/public/solicitud/descargarStockPdf/','_blank');
             },
         },
         mounted() {
