@@ -29,13 +29,18 @@
                                             <tr >
                                                 <td v-text="index"></td>
                                                 <td>
-                                                    <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" title="ver detalle de la solicitud" data-target="#myModal" @click="verSolicitud(sol.id)" >
+                                                    <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" title="ver detalle de la Requisicion" data-target="#myModal" @click="verSolicitud(sol.id)" >
                                                         <i class="fa fa-eye"></i>
                                                     </button>
 
                                                     <button type="button" class="btn btn-danger btn-sm"  data-toggle="tooltip" title="Exportar Pdf" @click="descargarPdf(sol.id)">
                                                        <i class="fa fa-file-pdf-o"></i>
                                                     </button>
+                                                    <template v-if="sol.rechazo_retomado == 1 && sol.status == 2">
+                                                        <button type="button" class="btn btn-success btn-sm"  data-toggle="modal"  title="Editar Requisicion Rechazada" data-target="#myModal2" @click="verSolicitud(sol.id)">
+                                                        <i class="fa fa-edit"></i>
+                                                        </button>
+                                                    </template>
                                                 </td>
                                                 <td v-text="sol.num_orden"></td>
                                                 <td v-text="sol.nombre_solcitante"></td>
@@ -94,11 +99,14 @@
                                         <div class="row">
                                             <div class="col-sm-4"><b>Estado de la Solicitud:</b></div>
                                             <div class="col-sm-6">
-                                                <template v-if="oneSolicitud.status">
+                                                <template v-if="oneSolicitud.status == 1">
                                                     <span class="badge badge-warning">Pendiente</span>
                                                 </template>
-                                                <template v-else>
+                                                <template v-else-if="oneSolicitud.status == 0">
                                                     <span class="badge badge-info">Realizado</span>
+                                                </template>
+                                                <template v-else>
+                                                    <span class="badge badge-danger">Rechazado</span>
                                                 </template>
                                             </div>
                                         </div>
@@ -155,6 +163,112 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="cerrarModal()">Cerrar</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+
+            <div class="modal fade" id ="myModal2">
+                <div class="modal-dialog modal-primary modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Editar Requisición</h4>
+                            <button type="button" class="close" data-dismiss="modal" @click="cerrarModal2()" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="fa fa-align-justify"></i>Detalle de la Solicitud
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-4"><b>Nombre Completo:</b></div>
+                                            <div class="col-sm-6" v-text="oneSolicitud.nombre_soli"></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4"><b>Fecha Solicitada:</b></div>
+                                            <div class="col-sm-6" v-text="oneSolicitud.fecha_hora"></div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4"><b>Agencia:</b></div>
+                                            <div class="col-sm-6" v-text="oneSolicitud.agencia_nombre">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4"><b>Departamento:</b></div>
+                                            <div class="col-sm-6" v-text="oneSolicitud.departamento_nombre">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4"><b>Estado de la Solicitud:</b></div>
+                                            <div class="col-sm-6">
+                                                <template v-if="oneSolicitud.status == 1">
+                                                    <span class="badge badge-warning">Pendiente</span>
+                                                </template>
+                                                <template v-else-if="oneSolicitud.status == 0">
+                                                    <span class="badge badge-info">Realizado</span>
+                                                </template>
+                                                <template v-else>
+                                                    <span class="badge badge-danger">Rechazado</span>
+                                                </template>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div v-show="errorStock" class="form-group">
+                                            <div class="text-center text-error">
+                                                <div v-for="error in arrayErrorStock" :key="error" v-text="error">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div v-show="errorCampos" class="form-group">
+                                            <div class="text-center text-error">
+                                                <div v-for="error in arrayCamposVacios" :key="error" v-text="error">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <table class="table table-striped table-bordered" style="width:100%">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Producto</th>
+                                                <th>Cantidad</th>
+                                                <th>Comentario</th>
+                                                <th>Come. Rechazo</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <template v-for="(sol,index) in detalleSolicitud">
+                                                <tr >
+                                                    <td v-text="index"></td>
+                                                    <td v-text="sol.nombre"></td>
+                                                    <td >
+                                                        <input type="number" style="width:45px" class="fomr-control" v-model="sol.cantidad">
+                                                    </td>
+                                                    <td >
+                                                        <input type="text" class="fomr-control" v-model="sol.comentario">
+                                                    </td>
+                                                    <td v-text="sol.comenRechazo"></td>
+                                                </tr>
+                                            </template>
+                                            </tbody>
+                                        </table>
+                                        <br>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                             <button type="button" class="btn btn-success"  @click="enviarRequisicion()">ENVIAR REQUISICION</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="cerrarModal2()">Cerrar</button>
                         </div>
                     </div>
                     <!-- /.modal-content -->
@@ -235,8 +349,64 @@
                     });
 
             },
+            enviarRequisicion(){
+            
+            let me = this;
+
+                    me.$swal({
+                                    title: 'Enviar Requisición?',
+                                    text: 'Revisar tu Requisición antes de enviar',
+                                    type: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Si Enviar!',
+                                    cancelButtonText: 'No, Cancelar!',
+                                    showCloseButton: true,
+                                    showLoaderOnConfirm: true
+                                    }).then((result) => {
+                            if(result.value) {
+                                console.log(result.value);
+                                    var url = me.ruta + '/solicitud/guardarNuevaRechazada';
+                                    axios.post(url,{
+                                        'detalleSolicitud' : me.detalleSolicitud,
+                                        'oneSolicitud' : me.oneSolicitud
+                                    }).then(function(response) {
+
+                                            if(response.data.value == 1){
+                                                me.$swal({
+                                                    type: 'success',
+                                                    title: 'Enviado...',
+                                                    text: 'Tu requisición a sido enviada!'
+                                                })
+                                                me.getDetalle();
+                                                me.cerrarModal2();
+                                            }else{
+                                                me.$swal({
+                                                    type: 'error',
+                                                    title: 'Error...',
+                                                    text: 'Ocurrio un error al enviar la solicitud!'
+                                                })
+                                            }
+
+                                    }).catch(function(error){
+                                        console.log("Error en listAgencia");
+                                    });
+                                       
+                            } else {
+                                this.$swal('Cancelado', 'Cancelaste el envio de la Requisición', 'info')
+                            }
+                    })
+            },  
             cerrarModal(){
                 jQuery("#myModal").modal("hide");
+                this.modal = 0;
+                this.detalleSolicitud = [];
+                this.oneSolicitud = [];
+                this.errorStock = 0;
+                this.arrayErrorStock = [];
+                this.errorCampos =0;
+            },
+            cerrarModal2(){
+                jQuery("#myModal2").modal("hide");
                 this.modal = 0;
                 this.detalleSolicitud = [];
                 this.oneSolicitud = [];

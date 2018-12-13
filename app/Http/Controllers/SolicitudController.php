@@ -93,6 +93,70 @@ class SolicitudController extends Controller
         }
 
     }
+    //guardarNuevaRechazada
+    public function guardarNuevaRechazada(Request $request)
+    {
+        if (!$request->ajax()) return redirect('/');
+
+    
+        
+        $retorno = 0;
+        try{
+
+            DB::beginTransaction();
+
+           $numOrd = DB::table('solicituds')->select('num_orden')
+                ->orderby('created_at','DESC')->take(1)->get();
+
+
+           if(count($numOrd) != 0){
+                foreach($numOrd as $n){
+                    $numero_orden = $n->num_orden + 1;
+                }
+           }else{
+               $numero_orden = 1;
+           }
+
+
+            $mytime = Carbon::now('America/Guatemala');
+
+            $solicitud = new Solicitud();
+            $solicitud->fecha_hora = $mytime;
+            $solicitud->nombre_solcitante = $request->oneSolicitud['nombre_soli'];
+            $solicitud->idAge_depto = $request->oneSolicitud['idAge_depto'];
+            $solicitud->comentario = $request->oneSolicitud['comentarioGeneral'];
+            $solicitud->idUser = $request->user()->id;
+            $solicitud->num_orden = $numero_orden;
+            $solicitud->save();
+
+            $sol = Solicitud::find($request->oneSolicitud['id_Soli']);
+            $sol->rechazo_retomado = 0;
+            $sol->update();
+
+            $productos = $request->detalleSolicitud;
+            \Log::debug($productos);
+            foreach($productos as $ep=>$det){
+                $detalleS =  new DetalleSolicitud();
+                $detalleS->idSolicitud = $solicitud->id;
+                $detalleS->cantidad = $det['cantidad'];
+                $detalleS->idProducto = $det['productoID'];
+                $detalleS->comentario = $det['comentario'];
+                $detalleS->save();
+                if($det['idCategoria'] == 2){
+                    $this->productoBodegaOne($detalleS->id, $det['productoID']);
+                }
+                    $this->log('Inserto','Se inserto un Detalle de solicitud',$detalleS->id,$request->user()->id);
+            }
+                    $this->log('Inserto','Se inserto una solicitud',$solicitud->id,$request->user()->id);
+            DB::commit();
+            $this->envioCorreoSolicitudNew($numero_orden,$request);
+            return ['value' => 1];
+        }catch(Exception $e){
+            DB::rollBack();
+            return ['value' => 0];
+        }
+
+    }
     //metodo que envia el correo cuando un usuario genera una solicitud
     public function envioCorreoSolicitudNew($numero_orden,$request){
             $users = $request->user();
@@ -101,8 +165,8 @@ class SolicitudController extends Controller
             //AQUIEN MANDA EL CORREO
             $m->from('alerta@micoopeguadalupana.com.gt','MicoopeGuadalupana');
             //AQUIEN LE LLEGA EL CORREO
-         //  $m->to('dany.diaz@micoopeguadalupana.com.gt','Dany Diaz')->subject('Nueva Requisición');
-            $m->to('berenice.garcia@micoopeguadalupana.com.gt','Berenice Garcia')->cc('juliana.feliciano@micoopeguadalupana.com.gt','Juliana Feliciano')->subject('Nueva Requisición');
+           //$m->to('dany.diaz@micoopeguadalupana.com.gt','Dany Diaz')->subject('Nueva Requisición');
+           $m->to('berenice.garcia@micoopeguadalupana.com.gt','Berenice Garcia')->cc('juliana.feliciano@micoopeguadalupana.com.gt','Juliana Feliciano')->subject('Nueva Requisición');
 
         });
     }
@@ -268,7 +332,7 @@ class SolicitudController extends Controller
         $solicitud = Solicitud::join('agencia_departamento','solicituds.idAge_depto','=','agencia_departamento.id')
         ->join('agencias','agencia_departamento.agencia_id','=','agencias.id')
         ->join('departamentos','agencia_departamento.departamento_id','=','departamentos.id')
-        ->select('solicituds.id','solicituds.nombre_solcitante','solicituds.status','solicituds.total_gasto','solicituds.fecha_hora','solicituds.fecha_fin','solicituds.fecha_estimado','solicituds.num_orden','agencias.nombre as nombre_agencia','departamentos.nombre as nombre_Depto')
+        ->select('solicituds.id','solicituds.rechazo_retomado','solicituds.nombre_solcitante','solicituds.status','solicituds.total_gasto','solicituds.fecha_hora','solicituds.fecha_fin','solicituds.fecha_estimado','solicituds.num_orden','agencias.nombre as nombre_agencia','departamentos.nombre as nombre_Depto')
         ->where('solicituds.idUser','=',$request->user()->id)
         ->orderby('solicituds.fecha_hora','DESC')->get();
 
@@ -373,16 +437,18 @@ class SolicitudController extends Controller
         $solicitud = Solicitud::join('agencia_departamento','agencia_departamento.id','=','solicituds.idAge_depto')
             ->join('agencias','agencias.id','=','agencia_departamento.agencia_id')
             ->join('departamentos','departamentos.id','=','agencia_departamento.departamento_id')
-            ->select('solicituds.id as id_Soli','solicituds.nombre_solcitante as nombre_soli','solicituds.fecha_hora','solicituds.status',
+            ->select('solicituds.id as id_Soli','solicituds.nombre_solcitante as nombre_soli','solicituds.idAge_depto','solicituds.comentario as comentarioGeneral','solicituds.fecha_hora','solicituds.status',
                 'agencias.nombre as agencia_nombre','departamentos.nombre as departamento_nombre')
             ->where('solicituds.id','=',$id)
             ->first();
 
         $detalleSolicitud = Solicitud::join('detalle_solicituds','detalle_solicituds.idSolicitud','=','solicituds.id')
             ->join('productos','detalle_solicituds.IdProducto','=','productos.id')
-            ->select('productos.nombre','detalle_solicituds.id as idDetalle','detalle_solicituds.comenRechazo','detalle_solicituds.cantidad','detalle_solicituds.comentario as comentario','detalle_solicituds.precio_unitario','productos.id as productoID')
+            ->select('productos.nombre','productos.idCategoria','detalle_solicituds.id as idDetalle','detalle_solicituds.comenRechazo','detalle_solicituds.cantidad','detalle_solicituds.comentario as comentario','detalle_solicituds.precio_unitario','productos.id as productoID')
             ->where('solicituds.id','=',$id)
             ->get();
+
+            
         return [
                  'detalleSolicitud' => $detalleSolicitud,
                  'solicitud' => $solicitud

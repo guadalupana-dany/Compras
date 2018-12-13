@@ -67,6 +67,7 @@ Route::get('/solicitud/getAllSolicitudCliente','SolicitudController@getAllSolici
 Route::post('/solicitud/compraProductos','SolicitudController@compraProductos');
 Route::get('/solicitud/getAllCompra','SolicitudController@getAllCompra');
 Route::get('/solicitud/descargarStockPdf','SolicitudController@descargarStockPdf');
+Route::post('/solicitud/guardarNuevaRechazada','SolicitudController@guardarNuevaRechazada');
 
 
 Route::get('/testing',function(){
