@@ -128,7 +128,6 @@
                                                     <table class="table table-bordered" >
                                                         <thead>
                                                         <tr>
-                                                            <th>#</th>
                                                             <th>Producto</th>
                                                             <th>Cantidad</th>
                                                             <th>Precio U.</th>
@@ -138,15 +137,14 @@
                                                         </thead>
                                                         <tbody>
                                                             <tr v-for="(sol,index) in detalleSolicitud" :key="sol.id">
-                                                                <td v-text="index"></td>
-                                                                <td v-text="sol.nombre"></td>
+                                                               <td v-text="sol.nombre"></td>
                                                                 <template v-if="oneSolicitud.status">
-                                                                    <td><input type="number" v-model="sol.cantidad"  @change="validaStock(sol.productoID,sol.cantidad)"></td>
+                                                                    <td><input type="number"  style="width:30px" v-model="sol.cantidad"  @change="validaStock(sol.productoID,sol.cantidad)"></td>
                                                                 </template>
                                                                 <template v-else>
                                                                     <td v-text="sol.cantidad" @change="validaStock(sol.productoID,sol.cantidad)"></td>
                                                                 </template>
-                                                                <td><input type="text" v-model="sol.precio_unitario" ></td>
+                                                                <td><input type="text"  style="width:50px" v-model="sol.precio_unitario" ></td>
                                                                 <td v-text="sol.comentario"></td>
                                                                 <td> <input type="text" v-model="sol.comenRechazo" ></td>
                                                             </tr>
