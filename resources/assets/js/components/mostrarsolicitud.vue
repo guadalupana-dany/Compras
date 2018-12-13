@@ -298,7 +298,7 @@
                                                 }).then(function(response){
                                                     //console.log(response.data);
                                                     me.$swal({
-                                                        type: 'success',
+                                                        type:  'success',
                                                         title: 'SOLICITUD...',
                                                         text: 'Tu solicitud a sido despachada!'
                                                     })
@@ -394,7 +394,7 @@
                     'idProducto' : idProducto
                 }).then(function(response){
                     if(response.data.result){
-                        if(cantidad >= response.data.total_stock){
+                        if(cantidad > response.data.total_stock){
                             me.$swal({
                                 type: 'error',
                                 title: 'Error...',
@@ -415,11 +415,9 @@
 
                         axios.get(url).then(response => {
                             if(response.data.result){
-                              if(cantidad >= response.data.total_stock){
-
+                              if(cantidad > response.data.total_stock){
                                     me.arrayErrorStock.push("La cantidad del Producto " +  nombre + "  No es suficiente. Stock en Bodega es = "+response.data.total_stock);
                                     me.errorStock = 1
-
                                 }
                             }
                         });
