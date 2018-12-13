@@ -417,7 +417,7 @@
                             if(response.data.result){
                               if(cantidad >= response.data.total_stock){
 
-                                    me.arrayErrorStock.push("La cantidad del Producto " +  nombre + "No es suficiente en el stock.. En Bodega solo hay "+response.data.total_stock);
+                                    me.arrayErrorStock.push("La cantidad del Producto " +  nombre + "  No es suficiente. Stock en Bodega es = "+response.data.total_stock);
                                     me.errorStock = 1
 
                                 }
@@ -436,9 +436,9 @@
                 me.arrayErrorStock = [];
                 for(var i = 0; i < me.detalleSolicitud.length; i++){
                     if(!me.detalleSolicitud[i].cantidad) me.arrayCamposVacios.push("ingrese cantidad en "+me.detalleSolicitud[i].nombre);
-                    if(me.detalleSolicitud[i].cantidad < 1) me.arrayCamposVacios.push("La cantidad Mayor a 1 en "+me.detalleSolicitud[i].nombre);
+                    if(me.detalleSolicitud[i].cantidad < 0) me.arrayCamposVacios.push("La cantidad Mayor a 0 en "+me.detalleSolicitud[i].nombre);
                     if(!me.detalleSolicitud[i].precio_unitario) me.arrayCamposVacios.push("ingrese precio en "+me.detalleSolicitud[i].nombre);
-                    if(me.detalleSolicitud[i].precio_unitario < 0) me.arrayCamposVacios.push("El precio Mayor a 1 en "+me.detalleSolicitud[i].nombre);
+                    if(me.detalleSolicitud[i].precio_unitario < 0) me.arrayCamposVacios.push("El precio Mayor a 0 en "+me.detalleSolicitud[i].nombre);
 
                 }
                 if(me.arrayCamposVacios.length) me.errorCampos = 1;
