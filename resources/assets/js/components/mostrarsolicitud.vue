@@ -139,7 +139,7 @@
                                                             <tr v-for="(sol,index) in detalleSolicitud" :key="sol.id">
                                                                <td v-text="sol.nombre"></td>
                                                                 <template v-if="oneSolicitud.status">
-                                                                    <td><input type="number"  style="width:30px" v-model="sol.cantidad"  @change="validaStock(sol.productoID,sol.cantidad)"></td>
+                                                                    <td><input type="number"  style="width:50px" v-model="sol.cantidad"  @change="validaStock(sol.productoID,sol.cantidad)"></td>
                                                                 </template>
                                                                 <template v-else>
                                                                     <td v-text="sol.cantidad" @change="validaStock(sol.productoID,sol.cantidad)"></td>
