@@ -78,9 +78,9 @@ class SolicitudController extends Controller
                 $detalleS->idProducto = $det['idProducto'];
                 $detalleS->comentario = $det['comentarioDetalle'];
                 $detalleS->save();
-                if($det['idCategoria'] == 2){
+            /*    if($det['idCategoria'] == 2){
                     $this->productoBodegaOne($detalleS->id, $det['idProducto']);
-                }
+                }*/
                     $this->log('Inserto','Se inserto un Detalle de solicitud',$detalleS->id,$request->user()->id);
             }
                     $this->log('Inserto','Se inserto una solicitud',$solicitud->id,$request->user()->id);
@@ -98,8 +98,8 @@ class SolicitudController extends Controller
     {
         if (!$request->ajax()) return redirect('/');
 
-    
-        
+
+
         $retorno = 0;
         try{
 
@@ -142,9 +142,9 @@ class SolicitudController extends Controller
                 $detalleS->idProducto = $det['productoID'];
                 $detalleS->comentario = $det['comentario'];
                 $detalleS->save();
-                if($det['idCategoria'] == 2){
+               /* if($det['idCategoria'] == 2){
                     $this->productoBodegaOne($detalleS->id, $det['productoID']);
-                }
+                }*/
                     $this->log('Inserto','Se inserto un Detalle de solicitud',$detalleS->id,$request->user()->id);
             }
                     $this->log('Inserto','Se inserto una solicitud',$solicitud->id,$request->user()->id);
@@ -165,7 +165,7 @@ class SolicitudController extends Controller
             //AQUIEN MANDA EL CORREO
             $m->from('alerta@micoopeguadalupana.com.gt','MicoopeGuadalupana');
             //AQUIEN LE LLEGA EL CORREO
-           //$m->to('dany.diaz@micoopeguadalupana.com.gt','Dany Diaz')->subject('Nueva Requisición');
+          // $m->to('dany.diaz@micoopeguadalupana.com.gt','Dany Diaz')->subject('Nueva Requisición');
            $m->to('berenice.garcia@micoopeguadalupana.com.gt','Berenice Garcia')->cc('juliana.feliciano@micoopeguadalupana.com.gt','Juliana Feliciano')->subject('Nueva Requisición');
 
         });
@@ -448,7 +448,7 @@ class SolicitudController extends Controller
             ->where('solicituds.id','=',$id)
             ->get();
 
-            
+
         return [
                  'detalleSolicitud' => $detalleSolicitud,
                  'solicitud' => $solicitud
@@ -512,10 +512,16 @@ class SolicitudController extends Controller
         foreach($detSoli as $ep=>$det){
             $detalleS =  DetalleSolicitud::find($det['idDetalle']);
             $detalleS->cantidad = $det['cantidad'];
-            $detalleS->precio_unitario = $det['precio_unitario'];
+                if($det['idCategoria'] == 2){
+                    $this->productoBodegaOne($detalleS->id, $det['productoID']);
+                }else{
+                    $detalleS->precio_unitario = $det['precio_unitario'];
+                }
             $detalleS->precio_total = $det['cantidad'] * $det['precio_unitario'];
             $detalleS->comenRechazo = $det['comenRechazo'];
             $detalleS->update();
+
+
             $this->log('Update','Se despacho detalle de solicitud', $detalleS->id, $request->user()->id);
             $controlBodega = ControlBodega::where('idProducto','=', $det['productoID'])->first();
            if($controlBodega){

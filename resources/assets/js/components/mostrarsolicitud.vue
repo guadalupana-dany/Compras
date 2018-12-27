@@ -130,7 +130,7 @@
                                                         <tr>
                                                             <th>Producto</th>
                                                             <th>Cantidad</th>
-                                                            <th>Precio U.</th>
+                                                            <th>P/U</th>
                                                             <th>Corr./Come.</th>
                                                             <th>Com. Rechazo o Cant.</th>
                                                         </tr>
@@ -144,7 +144,13 @@
                                                                 <template v-else>
                                                                     <td v-text="sol.cantidad" @change="validaStock(sol.productoID,sol.cantidad)"></td>
                                                                 </template>
-                                                                <td><input type="text"  style="width:50px" v-model="sol.precio_unitario" ></td>
+                                                                <template v-if="sol.idCategoria == 2">
+                                                                    <td><input type="text"  style="width:50px" v-model="sol.precio_unitario" disabled ></td>
+                                                                </template>
+                                                               <template v-else>
+                                                                    <td><input type="text"  style="width:50px" v-model="sol.precio_unitario" ></td>
+                                                                </template>
+
                                                                 <td v-text="sol.comentario"></td>
                                                                 <td> <input type="text" v-model="sol.comenRechazo" ></td>
                                                             </tr>
@@ -154,10 +160,10 @@
                                             </div>
                                         </div>
                                         <br>
-                                         <div class="row">
+                                      <!--   <div class="row">
                                             <div class="col-sm-4"><b>Total:</b></div>
                                             <div class="col-sm-6"><b>Q. {{ total = calcularTotal }}</b></div>
-                                        </div>
+                                        </div> -->
 
                                     </div>
                                 </div>
@@ -430,13 +436,18 @@
             validarCampos(){
                 let me = this;
                 me.arrayErrorStock = [];
+
                 for(var i = 0; i < me.detalleSolicitud.length; i++){
                     if(!me.detalleSolicitud[i].cantidad) me.arrayCamposVacios.push("ingrese cantidad en "+me.detalleSolicitud[i].nombre);
-                    if(me.detalleSolicitud[i].cantidad < 0) me.arrayCamposVacios.push("La cantidad Mayor a 0 en "+me.detalleSolicitud[i].nombre);
-                    if(!me.detalleSolicitud[i].precio_unitario) me.arrayCamposVacios.push("ingrese precio en "+me.detalleSolicitud[i].nombre);
+
+                    if(me.detalleSolicitud[i].cantidad < 0)  me.arrayCamposVacios.push("La cantidad Mayor a 0 en "+me.detalleSolicitud[i].nombre);
+
+
+                    if((me.detalleSolicitud[i].idCategoria != 2) && (!me.detalleSolicitud[i].precio_unitario)) me.arrayCamposVacios.push("ingrese precio en "+me.detalleSolicitud[i].nombre);
                     if(me.detalleSolicitud[i].precio_unitario < 0) me.arrayCamposVacios.push("El precio Mayor a 0 en "+me.detalleSolicitud[i].nombre);
 
                 }
+                if(!me.fecha_estimado) me.arrayCamposVacios.push("ingrese la fecha estimado de entrega");
                 if(me.arrayCamposVacios.length) me.errorCampos = 1;
                 return me.errorCampos;
             },
