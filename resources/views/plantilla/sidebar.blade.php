@@ -24,7 +24,7 @@
                 <?php
                 $fechaActual = new DateTime();
                 $fecha = \Carbon\Carbon::now()->startOfMonth();
-                $fechaLimite = strtotime ( '+16 day' , strtotime ( $fecha ) ) ;
+                $fechaLimite = strtotime ( '+5 day' , strtotime ( $fecha ) ) ;
                 $fechaLimite = date ( 'Y-m-d' , $fechaLimite );
                 $solicitudes = DB::table('solicituds')->where('idUser','=',Auth::user()->id)
                             ->select('created_at','status')->orderby('created_at','DESC')->take(1)->first();
@@ -45,6 +45,11 @@
                                         <a class="nav-link" href="#"><i class="fa fa-newspaper-o"></i>Requisición</a>
                                     </li>
                                 @else
+                                        @if((Auth::user()->prioridad_pedido))
+                                        <li @click="menu=3" class="nav-item">
+                                            <a class="nav-link" href="#"><i class="fa fa-newspaper-o"></i>Requisición</a>
+                                        </li>
+                                       @endif
 
                                 @endif
 

@@ -46,7 +46,7 @@ class DetalleExport implements FromCollection
                 ->where('solicituds.fecha_hora','<=',$this->fechaFin);
             }
 
-        if($this->estado != 2){
+        if($this->estado != 3){
             $solicitud->where('solicituds.status','=',$this->estado);
             }
 
@@ -60,7 +60,6 @@ class DetalleExport implements FromCollection
 
 
         $solicitud = $solicitud->get();
-
         return $solicitud;
 
     }
