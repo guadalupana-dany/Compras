@@ -36,9 +36,9 @@ class DetalleExport implements FromCollection
         ->join('agencia_departamento','solicituds.idAge_depto','=','agencia_departamento.id')
         ->join('agencias','agencia_departamento.agencia_id','=','agencias.id')
         ->join('departamentos','agencia_departamento.departamento_id','=','departamentos.id')
-        ->select('productos.nombre as nombre_producto','detalle_solicituds.precio_total','detalle_solicituds.cantidad','detalle_solicituds.comentario',
-        'users.name as nombre_user','solicituds.fecha_hora as fecha','solicituds.num_orden','agencias.nombre as nombre_agencia',
-        'departamentos.nombre as departamento_nombre','solicituds.status');
+        ->select('solicituds.num_orden','productos.nombre as nombre_producto','detalle_solicituds.cantidad','detalle_solicituds.precio_total','detalle_solicituds.comentario',
+        'users.name as nombre_user','solicituds.fecha_hora as fecha','agencias.nombre as nombre_agencia',
+        'departamentos.nombre as departamento_nombre');
 
         if($this->fechaInicio and $this->fechaFin){
                 $solicitud
