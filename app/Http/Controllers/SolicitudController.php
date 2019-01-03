@@ -527,6 +527,7 @@ class SolicitudController extends Controller
            if($controlBodega){
                 $resta = $controlBodega->total_stock -  $det['cantidad'];
                 $controlBodega->total_stock = $resta;
+                $controlBodega->total_saldo = $resta * $controlBodega->total_unitario;
                 $controlBodega->save();
             }
         }

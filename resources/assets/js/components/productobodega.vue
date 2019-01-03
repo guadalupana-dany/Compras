@@ -46,7 +46,7 @@
                             <tbody>
                                 <template v-for="(prodB,index) in productoBodega">
                                 <tr >
-                                    <td v-text="index"></td>
+                                    <td v-text="index + 1"></td>
                                     <td>
                                         <button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" title="Editar este producto" @click="modalUpdate(prodB)" >
                                             <i class="fa fa-edit"></i>
