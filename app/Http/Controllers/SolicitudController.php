@@ -566,6 +566,10 @@ class SolicitudController extends Controller
             'detalle_solicituds.comentario as comentario')
             ->where('solicituds.id','=',$id)
             ->get();
+
+            \Log::debug('**********');
+            \Log::debug($detalleSolicitud);
+
             //'SUM(detalle_solicituds.precio_unitario) as total'
 
   /*soli: {"total":"0.00","id_Soli":63,"orden":34,"nombre_soli":"yoselin","fecha_hora":"2019-01-11 14:00:06","status":0,"agencia_nombre":"OFICINAS CENTRALES","departamento_nombre":"MERCADEO"}
