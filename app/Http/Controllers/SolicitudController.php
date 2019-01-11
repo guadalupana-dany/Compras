@@ -171,12 +171,13 @@ class SolicitudController extends Controller
         });
     }
     //metodo que muestra solo un producto en bodega que recibe dos parametros el id del detale y un id de producto
-    public function productoBodegaOne($detalleS_id,$idProducto){
+    public function productoBodegaOne($detalleS_id,$idProducto,$cantidaad){
         \Log::debug(" detalleS_id " . $detalleS_id . "idProducto" . $idProducto);
 
         $controlBodega = DB::table('control_bodega_')->Where('idProducto','=',$idProducto)->first();
         $detalle = DetalleSolicitud::find($detalleS_id);
         $detalle->precio_unitario = $controlBodega->total_unitario;
+        $detalle->precio_total = $cantidaad * $controlBodega->total_unitario;
         $detalle->update();
          //   $control_bodega =
     }
@@ -509,18 +510,16 @@ class SolicitudController extends Controller
         $solicitud->update();
 
         $detSoli = $request->detalleSoli;
-        \Log::debug('******* detalle de la soli *************');
-        \Log::debug($detSoli);
-        \Log::debug('******* detalle de la soli *************');
+
         foreach($detSoli as $ep=>$det){
             $detalleS =  DetalleSolicitud::find($det['idDetalle']);
             $detalleS->cantidad = $det['cantidad'];
                 if($det['idCategoria'] == 2){
-                    $this->productoBodegaOne($detalleS->id, $det['productoID']);
+                    $this->productoBodegaOne($detalleS->id, $det['productoID'],$det['cantidad']);
                 }else{
                     $detalleS->precio_unitario = $det['precio_unitario'];
+                    $detalleS->precio_total = $det['cantidad'] * $det['precio_unitario'];
                 }
-            $detalleS->precio_total = $det['cantidad'] * $det['precio_unitario'];
             $detalleS->comenRechazo = $det['comenRechazo'];
             $detalleS->update();
 
@@ -546,6 +545,14 @@ class SolicitudController extends Controller
     //function que exporta a pdf el detalle de la solicitud de cada solicitud
     public function pdf(Request $request, $id){
 
+        $suma = Solicitud::join('detalle_solicituds','detalle_solicituds.idSolicitud','=','solicituds.id')
+        ->where('solicituds.id','=',$id)
+        ->sum('detalle_solicituds.precio_total');
+
+        $soliUpdate = Solicitud::find($id);
+        $soliUpdate->total_gasto = $suma;
+        $soliUpdate->update();
+
         $solicitud = Solicitud::join('agencia_departamento','agencia_departamento.id','=','solicituds.idAge_depto')
             ->join('agencias','agencias.id','=','agencia_departamento.agencia_id')
             ->join('departamentos','departamentos.id','=','agencia_departamento.departamento_id')
@@ -553,12 +560,20 @@ class SolicitudController extends Controller
                 'agencias.nombre as agencia_nombre','departamentos.nombre as departamento_nombre')
             ->where('solicituds.id','=',$id)
             ->first();
-
         $detalleSolicitud = Solicitud::join('detalle_solicituds','detalle_solicituds.idSolicitud','=','solicituds.id')
             ->join('productos','detalle_solicituds.IdProducto','=','productos.id')
-            ->select('detalle_solicituds.precio_total','detalle_solicituds.precio_unitario','productos.nombre','detalle_solicituds.id as idDetalle','detalle_solicituds.cantidad','detalle_solicituds.comentario as comentario')
+            ->select('detalle_solicituds.precio_total','detalle_solicituds.precio_unitario','productos.nombre','detalle_solicituds.id as idDetalle','detalle_solicituds.cantidad',
+            'detalle_solicituds.comentario as comentario')
             ->where('solicituds.id','=',$id)
             ->get();
+            //'SUM(detalle_solicituds.precio_unitario) as total'
+
+  /*soli: {"total":"0.00","id_Soli":63,"orden":34,"nombre_soli":"yoselin","fecha_hora":"2019-01-11 14:00:06","status":0,"agencia_nombre":"OFICINAS CENTRALES","departamento_nombre":"MERCADEO"}
+
+   deta [{"precio_total":"0.00","precio_unitario":"23.64","nombre":"ALMOHADILLAS","idDetalle":146,"cantidad":2,"comentario":"sds"},{"precio_total":"0.00","precio_unitario":"8.61","nombre":"ALMOHADILLA PARA PIZARRON","idDetalle":147,"cantidad":1,"comentario":"ds"}]
+ */
+
+
 
         $pdf = \PDF::loadView('pdf.detalle',['detalleSolicitud' => $detalleSolicitud,'solicitud' => $solicitud]);
         return $pdf->download('detalle.pdf');
