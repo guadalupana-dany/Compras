@@ -509,6 +509,9 @@ class SolicitudController extends Controller
         $solicitud->update();
 
         $detSoli = $request->detalleSoli;
+        \Log::debug('******* detalle de la soli *************');
+        \Log::debug($detSoli);
+        \Log::debug('******* detalle de la soli *************');
         foreach($detSoli as $ep=>$det){
             $detalleS =  DetalleSolicitud::find($det['idDetalle']);
             $detalleS->cantidad = $det['cantidad'];
@@ -553,7 +556,7 @@ class SolicitudController extends Controller
 
         $detalleSolicitud = Solicitud::join('detalle_solicituds','detalle_solicituds.idSolicitud','=','solicituds.id')
             ->join('productos','detalle_solicituds.IdProducto','=','productos.id')
-            ->select('detalle_solicituds.precio_total','productos.nombre','detalle_solicituds.id as idDetalle','detalle_solicituds.cantidad','detalle_solicituds.comentario as comentario')
+            ->select('detalle_solicituds.precio_total','detalle_solicituds.precio_unitario','productos.nombre','detalle_solicituds.id as idDetalle','detalle_solicituds.cantidad','detalle_solicituds.comentario as comentario')
             ->where('solicituds.id','=',$id)
             ->get();
 

@@ -68,7 +68,7 @@
             <td>{{ $det->cantidad }}</td>
             <td>{{ $det->nombre }}</td>
             <td>{{ $det->comentario }}</td>
-            <td>{{ $det->precio_total }}</td>
+            <td>{{ $det->precio_unitario *  $det->cantidad }}</td>
         </tr>
         @endforeach
         <tr>
