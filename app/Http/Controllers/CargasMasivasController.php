@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use Mockery\CountValidator\Exception;
-
+use App\Solicitud;
 class CargasMasivasController extends Controller
 {
     public function __construct()
@@ -176,9 +176,13 @@ class CargasMasivasController extends Controller
     }
 
     public function categoria(Request $request){
-        $categoria = new Categoria();
+      /*  $categoria = new Categoria();
         $categoria->nombre = $request->descCategoria;
-        $categoria->save();
+        $categoria->save();*/
+
+        $detallesoli = Solicitud::where('precio_total','=','null')->get();
+        \Log::debug('vacios');
+        \Log::debug($detallesoli);
     }
     public function producto(Request $request){
         $producto = new Producto();
