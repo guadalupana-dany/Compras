@@ -166,7 +166,7 @@ class SolicitudController extends Controller
             $m->from('alerta@micoopeguadalupana.com.gt','MicoopeGuadalupana');
             //AQUIEN LE LLEGA EL CORREO
           // $m->to('dany.diaz@micoopeguadalupana.com.gt','Dany Diaz')->subject('Nueva Requisición');
-           $m->to('berenice.garcia@micoopeguadalupana.com.gt','Berenice Garcia')->cc('juliana.feliciano@micoopeguadalupana.com.gt','Juliana Feliciano')->subject('Nueva Requisición');
+            $m->to('berenice.garcia@micoopeguadalupana.com.gt','Berenice Garcia')->cc('juliana.feliciano@micoopeguadalupana.com.gt','Juliana Feliciano')->subject('Nueva Requisición');
 
         });
     }
@@ -289,6 +289,45 @@ class SolicitudController extends Controller
                             ->select('bitacora_compras.*','users.name')
                             ->get();
             return ['compras' => $compras];
+    }
+    //actualizar todo lo del producto de bodega
+    public function updateProductoBodegaTotal(Request $request){
+
+
+        if (!$request->ajax()) return redirect('/');
+
+        $mytime = Carbon::now('America/Guatemala');
+        \Log::debug('ACTUALIZANDO PRODUCTO DE BODEGA' .$mytime);
+        \Log::debug($request);
+        try{
+
+            DB::beginTransaction();
+            $controlBodega = ControlBodega::find($request->idControlBodegaUP);
+            $controlBodega->can_mes_anterior = $request->can_mes_anteriorUP;
+            $controlBodega->pre_u_mes_anterior = $request->pre_u_mes_anteriorUP;
+            $controlBodega->tot_mes_anterior = $request->tot_mes_anteriorUP;
+            $controlBodega->can_mes_actual = $request->can_mes_actualUP;
+            $controlBodega->pre_u_mes_actual = $request->pre_u_mes_actualUP;
+            $controlBodega->tot_mes_actual = $request->tot_mes_actualUP;
+            $controlBodega->total_stock =  $request->total_stockUP;
+            $controlBodega->total_saldo =  $request->total_saldoUP;
+            $controlBodega->total_unitario = $request->total_unitarioUP;
+            $controlBodega->proveedor = $request->proveedorUP;
+            $controlBodega->update();
+
+            $producto = Producto::find($request->idProductoUP);
+            $producto->nombre = $request->nombreProductoUP;
+            $producto->update();
+
+            DB::commit();
+        }catch(Exception $e){
+            DB::rollBack();
+        }
+
+
+
+
+
     }
     //actualizar el stock en bodega
     public function updateProductoBodega(Request $request){

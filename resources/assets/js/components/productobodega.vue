@@ -51,6 +51,9 @@
                                         <button type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" title="Editar este producto" @click="modalUpdate(prodB)" >
                                             <i class="fa fa-edit"></i>
                                         </button>
+                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" title="Editar este producto" @click="cuadrar(prodB)" >
+                                            Cuadrar
+                                        </button>
                                     </td>
                                     <td v-text="prodB.nombre"></td>
                                     <td v-text="prodB.proveedor"></td>
@@ -304,6 +307,74 @@
                 </div>
                 <!-- /.modal-dialog -->
             </div>
+            <!-- MODAL PARA LA ACTUALIZACION DE PRODUCTO DE BODEGA -->
+            <div class="modal fade" tabindex="-1" :class="{'mostrar' : modalBodega}" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+                <div class="modal-dialog modal-primary modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">{{ nombreProductoUP }}</h4>
+                            <button type="button" class="close" @click="cerrarModalBodega()" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid">
+                                <div class="card">
+                                    <div class="card-body">
+
+                                        <div class=row>
+                                            <div class="col-sm-2">Can Mes Ant:</div>
+                                            <div class="col-md-4"> <input type="text" class="form-control" v-model="can_mes_anteriorUP"></div>
+                                            <div class="col-sm-2"> <label for="inputEmail3" class="control-label">Pre U Mes Ant:</label></div>
+                                            <div class="col-md-4"><input type="text" class="form-control" v-model="pre_u_mes_anteriorUP"></div>
+                                        </div>
+                                        <br>
+                                        <div class=row>
+                                            <div class="col-sm-2">Total Mes Ant:</div>
+                                            <div class="col-md-4"> <input type="text" class="form-control" v-model="tot_mes_anteriorUP"></div>
+                                            <div class="col-sm-2"> <label for="inputEmail3" class="control-label">Can Mes Act:</label></div>
+                                            <div class="col-md-4"><input type="text" class="form-control" v-model="can_mes_actualUP"></div>
+                                        </div>
+                                        <br>
+                                        <div class=row>
+                                            <div class="col-sm-2">Pre U Mes Act:</div>
+                                            <div class="col-md-4"> <input type="text" class="form-control" v-model="pre_u_mes_actualUP"></div>
+                                            <div class="col-sm-2"> <label for="inputEmail3" class="control-label">Total Mes Act:</label></div>
+                                            <div class="col-md-4"><input type="text" class="form-control" v-model="tot_mes_actualUP"></div>
+                                        </div>
+                                        <br>
+                                        <div class=row>
+                                            <div class="col-sm-2">Saldo:</div>
+                                            <div class="col-md-4"> <input type="text" class="form-control" v-model="total_saldoUP"></div>
+                                            <div class="col-sm-2"> <label for="inputEmail3" class="control-label">Stok:</label></div>
+                                            <div class="col-md-4"><input type="text" class="form-control" v-model="total_stockUP"></div>
+                                        </div>
+                                        <br>
+                                        <div class=row>
+                                                <div class="col-sm-2"> <label for="inputEmail3" class="control-label">Precio Unitario:</label></div>
+                                                <div class="col-md-4"><input type="text" class="form-control" v-model="total_unitarioUP"></div>
+                                                <div class="col-sm-2"> <label for="inputEmail3" class="control-label">Proveedor:</label></div>
+                                                <div class="col-md-4"><input type="text" class="form-control" v-model="proveedorUP"></div>
+                                        </div>
+                                        <div class=row>
+                                                <div class="col-sm-2"> <label for="inputEmail3" class="control-label">NOMBRE:</label></div>
+                                                <div class="col-md-4"><input type="text" class="form-control" v-model="nombreProductoUP"></div>
+                                        </div>
+                                        <br>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" @click="updateProducto()">GUARDAR</button>
+                            <button type="button" class="btn btn-primary" @click="cerrarModalBodega()">Cerrar</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
 
 
         </main>
@@ -359,6 +430,25 @@
                 //
                 ArrayCategoria : [],
                 IdCategoria : 0,
+
+
+
+                //PARA ACTUALIZAR BODEGA
+                modalBodega : 0,
+                can_mes_actualUP: 0,
+                can_mes_anteriorUP: 0,
+                idControlBodegaUP: 0,
+                idProductoUP: 0,
+                nombreProductoUP: '',
+                pre_u_mes_actualUP: 0,
+                pre_u_mes_anteriorUP: 0,
+                proveedorUP: '',
+                tot_mes_actualUP: 0,
+                tot_mes_anteriorUP: 0,
+                total_saldoUP: 0,
+                total_stockUP: 0,
+                total_unitarioUP: 0,
+
                 }
 
         },
@@ -402,6 +492,67 @@
                     });
                    // me.dataTable();
 
+            },
+            limpiarCuadre(){
+                this.can_mes_actualUP= 0;
+                this.can_mes_anteriorUP= 0;
+                this.idControlBodegaUP= 0;
+                this.idProductoUP= 0;
+                this.nombreProductoUP= '';
+                this.pre_u_mes_actualUP= 0;
+                this.pre_u_mes_anteriorUP= 0;
+                this.proveedorUP= '';
+                this.tot_mes_actualUP= 0;
+                this.tot_mes_anteriorUP= 0;
+                this.total_saldoUP= 0;
+                this.total_stockUP= 0;
+                this.total_unitarioUP= 0;
+                this.modalBodega = 0;
+            },
+            cerrarModalBodega(){
+                this.limpiarCuadre();
+            },
+            //metodo que modifica todos los datos del estock
+            cuadrar(productos){
+                    this.can_mes_actualUP = productos.can_mes_actual;
+                    this.can_mes_anteriorUP= productos.can_mes_anterior;
+                    this.idControlBodegaUP= productos.idControl;
+                    this.idProductoUP= productos.idProducto;
+                    this.nombreProductoUP= productos.nombre;
+                    this.pre_u_mes_actualUP= productos.pre_u_mes_actual;
+                    this.pre_u_mes_anteriorUP= productos.pre_u_mes_anterior;
+                    this.proveedorUP= productos.proveedor;
+                    this.tot_mes_actualUP= productos.tot_mes_actual;
+                    this.tot_mes_anteriorUP= productos.tot_mes_anterior;
+                    this.total_saldoUP= productos.total_saldo;
+                    this.total_stockUP= productos.total_stock;
+                    this.total_unitarioUP= productos.total_unitario;
+                    this.modalBodega = 1;
+            },
+            updateProducto(){
+                let me = this;
+                let url = me.ruta + '/solicitud/updateProductoBodegaTotal';
+                    axios.post(url,{
+                    can_mes_actualUP :  me.can_mes_actualUP,
+                    can_mes_anteriorUP : me.can_mes_anteriorUP,
+                    idControlBodegaUP  : me.idControlBodegaUP,
+                    idProductoUP    : me.idProductoUP,
+                    nombreProductoUP    : me.nombreProductoUP,
+                    pre_u_mes_actualUP    : me.pre_u_mes_actualUP,
+                    pre_u_mes_anteriorUP    : me.pre_u_mes_anteriorUP,
+                    proveedorUP    : me.proveedorUP,
+                    tot_mes_actualUP    : me.tot_mes_actualUP,
+                    tot_mes_anteriorUP    : me.tot_mes_anteriorUP,
+                    total_saldoUP    : me.total_saldoUP,
+                    total_stockUP    : me.total_stockUP,
+                    total_unitarioUP    : me.total_unitarioUP,
+                        }).then(function(response){
+                            me.cerrarModalBodega();
+                            me.getProdcutoBodega();
+                        })
+                        .catch(function (error){
+                                console.log(error);
+                     });
             },
             //metodo que actualiza el stock en bodega osea cuando se compra producto
             modalUpdate(data=[]){
@@ -501,11 +652,6 @@
             },
             guardarCompra(){
                 console.log(" GUARDAR COMPRA  ")
-                /*this.modalCompras = 0;
-                this.proveedorC = '',
-                this.productoC = '',
-                this.cantidadC = 0,
-                this.totalPagoC = 0*/
                 let me = this;
                 let url = me.ruta + '/solicitud/compraProductos';
                                     axios.post(url,{

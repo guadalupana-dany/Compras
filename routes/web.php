@@ -58,6 +58,7 @@ Route::post('/solicitud/solicitudListo','SolicitudController@solicitudListo');
 Route::get('/solicitud/pdf/{id}','SolicitudController@pdf');
 Route::get('/solicitud/productoBodega','SolicitudController@productoBodega');
 Route::post('/solicitud/updateProductoBodega','SolicitudController@updateProductoBodega');
+Route::post('/solicitud/updateProductoBodegaTotal','SolicitudController@updateProductoBodegaTotal');
 Route::get('/solicitud/getAllDetaelleSolicitud','SolicitudController@getAllDetaelleSolicitud');
 Route::get('/solicitud/validarExitenciaProducto','SolicitudController@validarExitenciaProducto');
 Route::get('/solicitud/getUser','SolicitudController@getUser');
